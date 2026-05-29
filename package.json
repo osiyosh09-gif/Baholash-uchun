@@ -1,6 +1,6 @@
 {
   "name": "dtp-ocenka",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "ДТП Оценка — Система определения ущерба АТС",
   "main": "main.js",
   "author": "THE BEST VALUATION",
@@ -12,7 +12,8 @@
     "build-portable": "electron-builder --win portable --x64"
   },
   "dependencies": {
-    "electron": "^28.0.0"
+    "electron": "^28.0.0",
+    "better-sqlite3": "^9.4.3"
   },
   "devDependencies": {
     "electron-builder": "^24.0.0"

@@ -10,286 +10,307 @@
 
 <div class="app-container">
 
-  <!-- HEADER -->
+  <!-- ===== HEADER ===== -->
   <header class="app-header">
     <div class="header-logo">
       <div class="logo-circle">TBV</div>
       <div class="header-titles">
-        <h1>ДТП Оценка</h1>
-        <span>ООО «THE BEST VALUATION» — Система определения ущерба АТС</span>
+        <h1 id="h-appTitle">ДТП Оценка</h1>
+        <span id="h-appSubtitle">ООО «THE BEST VALUATION» — Система определения ущерба АТС</span>
       </div>
     </div>
+
+    <div class="header-center">
+      <div class="stats-pill">
+        <span class="stats-icon">📊</span>
+        <span id="stats-total">0</span> ta hisobot
+        &nbsp;|&nbsp;
+        Bu oy: <span id="stats-month">0</span>
+      </div>
+    </div>
+
     <div class="header-actions">
-      <button class="btn btn-secondary" id="btn-clear">🗑 Очистить</button>
-      <button class="btn btn-primary" id="btn-pdf">📄 Создать PDF</button>
+      <!-- Til tugmasi -->
+      <div class="lang-switcher">
+        <button class="lang-btn active" id="lang-ru" onclick="switchLang('ru')">RU</button>
+        <button class="lang-btn"        id="lang-uz" onclick="switchLang('uz')">UZ</button>
+      </div>
+      <button class="btn btn-ghost"      id="btn-history" onclick="openHistory()">📋 <span data-i18n="btnHistory">История</span></button>
+      <button class="btn btn-save"       id="btn-save"    onclick="saveReport()">💾 <span data-i18n="btnSave">Сохранить</span></button>
+      <button class="btn btn-secondary"  id="btn-clear"   onclick="clearForm()">🗑 <span data-i18n="btnClear">Очистить</span></button>
+      <button class="btn btn-primary"    id="btn-pdf"     onclick="openReport()">📄 <span data-i18n="btnPdf">Создать PDF</span></button>
     </div>
   </header>
 
-  <!-- MAIN FORM -->
+  <!-- ===== MAIN ===== -->
   <main class="form-container">
 
-    <!-- БЛОК 1: Реквизиты отчёта -->
+    <!-- БЛОК 1: Реквизиты -->
     <section class="form-section">
-      <h2 class="section-title">📋 Реквизиты отчёта</h2>
+      <h2 class="section-title" data-i18n="sec1">📋 Реквизиты отчёта</h2>
       <div class="form-grid">
         <div class="form-group">
-          <label>Номер отчёта *</label>
-          <input type="text" id="report_number" placeholder="например: 2026-001" />
+          <label data-i18n="labelReportNumber">Номер отчёта *</label>
+          <input type="text" id="report_number" placeholder="2026-001"/>
         </div>
         <div class="form-group">
-          <label>Дата составления *</label>
-          <input type="date" id="report_date" />
+          <label data-i18n="labelReportDate">Дата составления *</label>
+          <input type="date" id="report_date"/>
         </div>
         <div class="form-group">
-          <label>ФИО заказчика *</label>
-          <input type="text" id="client_name" placeholder="Иванов Иван Иванович" />
+          <label data-i18n="labelClientName">ФИО заказчика *</label>
+          <input type="text" id="client_name" placeholder="Иванов Иван Иванович"/>
         </div>
         <div class="form-group">
-          <label>Контактный телефон</label>
-          <input type="text" id="client_phone" placeholder="+998 90 000-00-00" />
+          <label data-i18n="labelClientPhone">Контактный телефон</label>
+          <input type="text" id="client_phone" placeholder="+998 90 000-00-00"/>
         </div>
         <div class="form-group">
-          <label>Адрес заказчика</label>
-          <input type="text" id="client_address" placeholder="г. Ташкент, ул. ..." />
+          <label data-i18n="labelClientAddress">Адрес заказчика</label>
+          <input type="text" id="client_address" placeholder="г. Ташкент, ул. ..."/>
         </div>
         <div class="form-group">
-          <label>Цель оценки</label>
-          <input type="text" id="eval_purpose" placeholder="Определение рыночной стоимости ущерба" />
+          <label data-i18n="labelEvalPurpose">Цель оценки</label>
+          <input type="text" id="eval_purpose" placeholder="Определение рыночной стоимости ущерба"/>
         </div>
       </div>
+    </section>
+
+    <!-- БЛОК 1.5: Фото автомобиля -->
+    <section class="form-section photo-section">
+      <h2 class="section-title">🖼 Фото автомобиля</h2>
+      <div class="photo-upload-area" id="photo-area" onclick="uploadPhoto()">
+        <div class="photo-placeholder" id="photo-placeholder">
+          <span class="photo-icon">📷</span>
+          <p data-i18n="photoPlaceholder">Нажмите для загрузки фото автомобиля</p>
+          <small>JPG, PNG, WEBP</small>
+        </div>
+        <img id="photo-preview" class="photo-preview hidden" alt="Фото авто"/>
+      </div>
+      <button class="btn btn-remove-photo hidden" id="btn-remove-photo"
+              onclick="removePhoto()" data-i18n="btnRemovePhoto">
+        ✕ Удалить фото
+      </button>
     </section>
 
     <!-- БЛОК 2: Идентификация АМТС -->
     <section class="form-section">
-      <h2 class="section-title">🚗 Идентификация АМТС</h2>
+      <h2 class="section-title" data-i18n="sec2">🚗 Идентификация АМТС</h2>
       <div class="form-grid">
         <div class="form-group">
-          <label>Марка автомобиля *</label>
-          <input type="text" id="car_brand" placeholder="например: Chevrolet" />
+          <label data-i18n="labelCarBrand">Марка *</label>
+          <input type="text" id="car_brand" placeholder="Chevrolet"/>
         </div>
         <div class="form-group">
-          <label>Модель *</label>
-          <input type="text" id="car_model" placeholder="например: Nexia 3" />
+          <label data-i18n="labelCarModel">Модель *</label>
+          <input type="text" id="car_model" placeholder="Nexia 3"/>
         </div>
         <div class="form-group">
-          <label>Год выпуска *</label>
-          <input type="number" id="car_year" placeholder="2020" min="1990" max="2026" />
+          <label data-i18n="labelCarYear">Год выпуска *</label>
+          <input type="number" id="car_year" placeholder="2020" min="1990" max="2026"/>
         </div>
         <div class="form-group">
-          <label>Цвет</label>
-          <input type="text" id="car_color" placeholder="Белый" />
+          <label data-i18n="labelCarColor">Цвет</label>
+          <input type="text" id="car_color" placeholder="Белый"/>
         </div>
         <div class="form-group">
-          <label>Гос. номер *</label>
-          <input type="text" id="car_plate" placeholder="01 A 000 AA" />
+          <label data-i18n="labelCarPlate">Гос. номер *</label>
+          <input type="text" id="car_plate" placeholder="01 A 000 AA"/>
         </div>
         <div class="form-group">
-          <label>VIN номер</label>
-          <input type="text" id="car_vin" placeholder="KMHXX51BXBU012345" />
+          <label data-i18n="labelCarVin">VIN номер</label>
+          <input type="text" id="car_vin" placeholder="KMHXX51BXBU012345"/>
         </div>
         <div class="form-group">
-          <label>Пробег (км)</label>
-          <input type="number" id="car_mileage" placeholder="75000" />
+          <label data-i18n="labelCarMileage">Пробег (км)</label>
+          <input type="number" id="car_mileage" placeholder="75000"/>
         </div>
         <div class="form-group">
-          <label>Тип кузова</label>
+          <label data-i18n="labelCarBody">Тип кузова</label>
           <select id="car_body">
-            <option value="Седан">Седан</option>
-            <option value="Хэтчбек">Хэтчбек</option>
-            <option value="Универсал">Универсал</option>
-            <option value="Внедорожник">Внедорожник</option>
-            <option value="Минивэн">Минивэн</option>
-            <option value="Пикап">Пикап</option>
+            <option>Седан</option><option>Хэтчбек</option>
+            <option>Универсал</option><option>Внедорожник</option>
+            <option>Минивэн</option><option>Пикап</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Объём двигателя (л)</label>
-          <input type="text" id="car_engine" placeholder="1.5" />
+          <label data-i18n="labelCarEngine">Объём двиг. (л)</label>
+          <input type="text" id="car_engine" placeholder="1.5"/>
         </div>
         <div class="form-group">
-          <label>Мощность (л.с.)</label>
-          <input type="number" id="car_power" placeholder="105" />
+          <label data-i18n="labelCarPower">Мощность (л.с.)</label>
+          <input type="number" id="car_power" placeholder="105"/>
         </div>
         <div class="form-group">
-          <label>КПП</label>
+          <label data-i18n="labelCarTrans">КПП</label>
           <select id="car_transmission">
-            <option value="Механическая">Механическая</option>
-            <option value="Автоматическая">Автоматическая</option>
-            <option value="Вариатор">Вариатор</option>
-            <option value="Роботизированная">Роботизированная</option>
+            <option>Механическая</option><option>Автоматическая</option>
+            <option>Вариатор</option><option>Роботизированная</option>
           </select>
         </div>
         <div class="form-group">
-          <label>Привод</label>
+          <label data-i18n="labelCarDrive">Привод</label>
           <select id="car_drive">
-            <option value="Передний">Передний</option>
-            <option value="Задний">Задний</option>
-            <option value="Полный">Полный</option>
+            <option>Передний</option><option>Задний</option><option>Полный</option>
           </select>
         </div>
       </div>
     </section>
 
-    <!-- БЛОК 3: Стоимость автомобиля -->
+    <!-- БЛОК 3: Стоимость -->
     <section class="form-section">
-      <h2 class="section-title">💰 Стоимость автомобиля</h2>
+      <h2 class="section-title" data-i18n="sec3">💰 Стоимость автомобиля</h2>
       <div class="form-grid">
         <div class="form-group">
-          <label>Рыночная стоимость до ДТП (сум) *</label>
-          <input type="number" id="car_value_before" placeholder="80000000" />
+          <label data-i18n="labelValueBefore">Рыночная стоимость до ДТП (сум) *</label>
+          <input type="number" id="car_value_before" placeholder="80000000"/>
         </div>
         <div class="form-group">
-          <label>Износ (%)</label>
-          <input type="number" id="car_wear" placeholder="25" min="0" max="100" id="car_wear" />
+          <label data-i18n="labelCarWear">Износ (%)</label>
+          <input type="number" id="car_wear" placeholder="25" min="0" max="100"/>
         </div>
         <div class="form-group">
-          <label>Остаточная стоимость (сум)</label>
-          <input type="number" id="car_residual" placeholder="автоматически" readonly />
+          <label data-i18n="labelCarResidual">Остаточная стоимость (сум)</label>
+          <input type="number" id="car_residual" readonly placeholder="авто"/>
         </div>
         <div class="form-group">
-          <label>Дата ДТП</label>
-          <input type="date" id="dtp_date" />
+          <label data-i18n="labelDtpDate">Дата ДТП</label>
+          <input type="date" id="dtp_date"/>
         </div>
         <div class="form-group">
-          <label>Место ДТП</label>
-          <input type="text" id="dtp_place" placeholder="г. Ташкент, ул. Амира Темура" />
+          <label data-i18n="labelDtpPlace">Место ДТП</label>
+          <input type="text" id="dtp_place" placeholder="г. Ташкент, ул. Амира Темура"/>
         </div>
         <div class="form-group">
-          <label>Номер справки ДТП</label>
-          <input type="text" id="dtp_ref" placeholder="№ 12345" />
+          <label data-i18n="labelDtpRef">Номер справки ДТП</label>
+          <input type="text" id="dtp_ref" placeholder="№ 12345"/>
         </div>
       </div>
     </section>
 
-    <!-- БЛОК 4: Калькуляция ущерба -->
+    <!-- БЛОК 4: Калькуляция -->
     <section class="form-section">
-      <h2 class="section-title">🔧 Калькуляция ущерба</h2>
+      <h2 class="section-title" data-i18n="sec4">🔧 Калькуляция ущерба</h2>
 
       <!-- Запчасти -->
-      <h3 class="subsection-title">Запчасти</h3>
+      <h3 class="subsection-title" data-i18n="subParts">Запчасти</h3>
       <div class="table-wrapper">
-        <table class="damage-table" id="parts-table">
-          <thead>
-            <tr>
-              <th>№</th>
-              <th>Наименование</th>
-              <th>Кол-во</th>
-              <th>Цена (сум)</th>
-              <th>Сумма (сум)</th>
-              <th></th>
-            </tr>
-          </thead>
+        <table class="damage-table">
+          <thead><tr>
+            <th data-i18n="colNum">№</th>
+            <th data-i18n="colName">Наименование</th>
+            <th data-i18n="colQty">Кол-во</th>
+            <th data-i18n="colPrice">Цена (сум)</th>
+            <th data-i18n="colSum">Сумма (сум)</th>
+            <th></th>
+          </tr></thead>
           <tbody id="parts-body">
             <tr>
               <td>1</td>
-              <td><input type="text" placeholder="Бампер передний" /></td>
-              <td><input type="number" value="1" min="1" class="qty-input" /></td>
-              <td><input type="number" placeholder="0" class="price-input" /></td>
+              <td><input type="text" placeholder="Бампер передний"/></td>
+              <td><input type="number" value="1" min="1" class="qty-input"/></td>
+              <td><input type="number" placeholder="0" class="price-input"/></td>
               <td class="sum-cell">0</td>
               <td><button class="btn-remove" onclick="removeRow(this)">✕</button></td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="4" class="total-label">Итого запчасти:</td>
-              <td id="parts-total" class="total-value">0</td>
-              <td></td>
-            </tr>
-          </tfoot>
+          <tfoot><tr>
+            <td colspan="4" class="total-label" data-i18n="totalParts">Итого запчасти:</td>
+            <td id="parts-total" class="total-value">0</td>
+            <td></td>
+          </tr></tfoot>
         </table>
-        <button class="btn btn-add" onclick="addRow('parts-body', 'parts-total')">+ Добавить запчасть</button>
+        <button class="btn btn-add" id="btn-add-part"
+                onclick="addRow('parts-body','parts-total')"
+                data-i18n="btnAddPart">+ Добавить запчасть</button>
       </div>
 
       <!-- Ремработы -->
-      <h3 class="subsection-title">Ремонтные работы</h3>
+      <h3 class="subsection-title" data-i18n="subWorks">Ремонтные работы</h3>
       <div class="table-wrapper">
-        <table class="damage-table" id="works-table">
-          <thead>
-            <tr>
-              <th>№</th>
-              <th>Наименование работы</th>
-              <th>Часы</th>
-              <th>Ставка (сум/час)</th>
-              <th>Сумма (сум)</th>
-              <th></th>
-            </tr>
-          </thead>
+        <table class="damage-table">
+          <thead><tr>
+            <th data-i18n="colNum">№</th>
+            <th data-i18n="colName">Наименование</th>
+            <th data-i18n="colHours">Часы</th>
+            <th data-i18n="colRate">Ставка (сум/час)</th>
+            <th data-i18n="colSum">Сумма (сум)</th>
+            <th></th>
+          </tr></thead>
           <tbody id="works-body">
             <tr>
               <td>1</td>
-              <td><input type="text" placeholder="Замена бампера" /></td>
-              <td><input type="number" value="1" min="0.5" step="0.5" class="qty-input" /></td>
-              <td><input type="number" placeholder="0" class="price-input" /></td>
+              <td><input type="text" placeholder="Замена бампера"/></td>
+              <td><input type="number" value="1" min="0.5" step="0.5" class="qty-input"/></td>
+              <td><input type="number" placeholder="0" class="price-input"/></td>
               <td class="sum-cell">0</td>
               <td><button class="btn-remove" onclick="removeRow(this)">✕</button></td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="4" class="total-label">Итого работы:</td>
-              <td id="works-total" class="total-value">0</td>
-              <td></td>
-            </tr>
-          </tfoot>
+          <tfoot><tr>
+            <td colspan="4" class="total-label" data-i18n="totalWorks">Итого работы:</td>
+            <td id="works-total" class="total-value">0</td>
+            <td></td>
+          </tr></tfoot>
         </table>
-        <button class="btn btn-add" onclick="addRow('works-body', 'works-total')">+ Добавить работу</button>
+        <button class="btn btn-add" id="btn-add-work"
+                onclick="addRow('works-body','works-total')"
+                data-i18n="btnAddWork">+ Добавить работу</button>
       </div>
 
       <!-- Материалы -->
-      <h3 class="subsection-title">Материалы</h3>
+      <h3 class="subsection-title" data-i18n="subMaterials">Материалы</h3>
       <div class="table-wrapper">
-        <table class="damage-table" id="materials-table">
-          <thead>
-            <tr>
-              <th>№</th>
-              <th>Наименование</th>
-              <th>Кол-во</th>
-              <th>Цена (сум)</th>
-              <th>Сумма (сум)</th>
-              <th></th>
-            </tr>
-          </thead>
+        <table class="damage-table">
+          <thead><tr>
+            <th data-i18n="colNum">№</th>
+            <th data-i18n="colName">Наименование</th>
+            <th data-i18n="colQty">Кол-во</th>
+            <th data-i18n="colPrice">Цена (сум)</th>
+            <th data-i18n="colSum">Сумма (сум)</th>
+            <th></th>
+          </tr></thead>
           <tbody id="materials-body">
             <tr>
               <td>1</td>
-              <td><input type="text" placeholder="Грунтовка" /></td>
-              <td><input type="number" value="1" min="1" class="qty-input" /></td>
-              <td><input type="number" placeholder="0" class="price-input" /></td>
+              <td><input type="text" placeholder="Грунтовка"/></td>
+              <td><input type="number" value="1" min="1" class="qty-input"/></td>
+              <td><input type="number" placeholder="0" class="price-input"/></td>
               <td class="sum-cell">0</td>
               <td><button class="btn-remove" onclick="removeRow(this)">✕</button></td>
             </tr>
           </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="4" class="total-label">Итого материалы:</td>
-              <td id="materials-total" class="total-value">0</td>
-              <td></td>
-            </tr>
-          </tfoot>
+          <tfoot><tr>
+            <td colspan="4" class="total-label" data-i18n="totalMaterials">Итого материалы:</td>
+            <td id="materials-total" class="total-value">0</td>
+            <td></td>
+          </tr></tfoot>
         </table>
-        <button class="btn btn-add" onclick="addRow('materials-body', 'materials-total')">+ Добавить материал</button>
+        <button class="btn btn-add" id="btn-add-mat"
+                onclick="addRow('materials-body','materials-total')"
+                data-i18n="btnAddMat">+ Добавить материал</button>
       </div>
 
-      <!-- Итоговые суммы -->
+      <!-- Итого -->
       <div class="grand-total-box">
         <div class="grand-row">
-          <span>Стоимость запчастей:</span>
+          <span data-i18n="sumParts">Стоимость запчастей:</span>
           <strong id="summary-parts">0 сум</strong>
         </div>
         <div class="grand-row">
-          <span>Стоимость работ:</span>
+          <span data-i18n="sumWorks">Стоимость работ:</span>
           <strong id="summary-works">0 сум</strong>
         </div>
         <div class="grand-row">
-          <span>Стоимость материалов:</span>
+          <span data-i18n="sumMaterials">Стоимость материалов:</span>
           <strong id="summary-materials">0 сум</strong>
         </div>
         <div class="grand-row grand-total">
-          <span>ИТОГО УЩЕРБ:</span>
+          <span data-i18n="sumTotal">ИТОГО УЩЕРБ:</span>
           <strong id="summary-total">0 сум</strong>
         </div>
         <div class="grand-row">
-          <span>Сумма прописью:</span>
+          <span data-i18n="sumWords">Сумма прописью:</span>
           <em id="summary-words">—</em>
         </div>
       </div>
@@ -297,37 +318,41 @@
 
     <!-- БЛОК 5: Оценщик -->
     <section class="form-section">
-      <h2 class="section-title">👤 Оценщик</h2>
+      <h2 class="section-title" data-i18n="sec5">👤 Оценщик</h2>
       <div class="form-grid">
         <div class="form-group">
-          <label>ФИО оценщика *</label>
-          <input type="text" id="expert_name" placeholder="Рахимов Алишер Бахтиёрович" />
+          <label data-i18n="labelExpertName">ФИО оценщика *</label>
+          <input type="text" id="expert_name" placeholder="Рахимов Алишер Бахтиёрович"/>
         </div>
         <div class="form-group">
-          <label>Должность</label>
-          <input type="text" id="expert_position" placeholder="Сертифицированный оценщик" />
+          <label data-i18n="labelExpertPos">Должность</label>
+          <input type="text" id="expert_position" placeholder="Сертифицированный оценщик"/>
         </div>
         <div class="form-group">
-          <label>Номер сертификата</label>
-          <input type="text" id="expert_cert" placeholder="OC-2024-001" />
+          <label data-i18n="labelExpertCert">Номер сертификата</label>
+          <input type="text" id="expert_cert" placeholder="OC-2024-001"/>
         </div>
         <div class="form-group">
-          <label>Стаж работы (лет)</label>
-          <input type="number" id="expert_exp" placeholder="5" min="0" />
+          <label data-i18n="labelExpertExp">Стаж (лет)</label>
+          <input type="number" id="expert_exp" placeholder="5" min="0"/>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- FOOTER -->
+  <!-- ===== FOOTER ===== -->
   <footer class="app-footer">
-    <span>ООО «THE BEST VALUATION» © 2026</span>
-    <span id="footer-total">Итого: 0 сум</span>
+    <span id="h-footer" data-i18n="footer">ООО «THE BEST VALUATION» © 2026</span>
+    <div class="footer-right">
+      <span class="save-indicator hidden" id="save-indicator">✅ Сохранено</span>
+      <span id="footer-total">Итого: 0 сум</span>
+    </div>
   </footer>
 
 </div>
 
+<script src="i18n.js"></script>
 <script src="renderer.js"></script>
 </body>
 </html>
