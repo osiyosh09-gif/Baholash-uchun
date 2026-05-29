@@ -1,236 +1,198 @@
+/**
+ * db.js — JSON fayl asosida ma'lumotlar bazasi
+ * better-sqlite3 o'rniga ishlatiladi (hech qanday o'rnatma shart emas)
+ */
+
+const fs   = require('fs');
 const path = require('path');
-const { app } = require('electron');
 
-let db = null;
-
-// ===== DB NI OCHISH / YARATISH =====
-function openDB() {
-  if (db) return db;
+// Electron mavjud bo'lsa userData, bo'lmasa joriy papka
+function getDataDir() {
   try {
-    const Database = require('better-sqlite3');
-    const dbPath = path.join(app.getPath('userData'), 'dtp_ocenka.db');
-    db = new Database(dbPath);
-    db.pragma('journal_mode = WAL');
-    createTables();
-    return db;
-  } catch (e) {
-    console.error('SQLite error:', e.message);
-    return null;
+    const { app } = require('electron');
+    return app.getPath('userData');
+  } catch(e) {
+    return path.join(__dirname, '..', 'data');
   }
 }
 
-// ===== JADVALLAR YARATISH =====
-function createTables() {
-  if (!db) return;
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS reports (
-      id            INTEGER PRIMARY KEY AUTOINCREMENT,
-      report_number TEXT    NOT NULL,
-      report_date   TEXT    NOT NULL,
-      client_name   TEXT    NOT NULL,
-      client_phone  TEXT,
-      client_address TEXT,
-      eval_purpose  TEXT,
-      car_brand     TEXT,
-      car_model     TEXT,
-      car_year      TEXT,
-      car_color     TEXT,
-      car_plate     TEXT,
-      car_vin       TEXT,
-      car_mileage   TEXT,
-      car_body      TEXT,
-      car_engine    TEXT,
-      car_power     TEXT,
-      car_transmission TEXT,
-      car_drive     TEXT,
-      car_value_before TEXT,
-      car_wear      TEXT,
-      car_residual  TEXT,
-      dtp_date      TEXT,
-      dtp_place     TEXT,
-      dtp_ref       TEXT,
-      expert_name   TEXT,
-      expert_position TEXT,
-      expert_cert   TEXT,
-      expert_exp    TEXT,
-      parts_json    TEXT,
-      works_json    TEXT,
-      materials_json TEXT,
-      parts_total   TEXT,
-      works_total   TEXT,
-      materials_total TEXT,
-      grand_total   TEXT,
-      car_photo     TEXT,
-      lang          TEXT DEFAULT 'ru',
-      created_at    TEXT DEFAULT (datetime('now','localtime')),
-      updated_at    TEXT DEFAULT (datetime('now','localtime'))
-    );
+function getDbPath() {
+  const dir = getDataDir();
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  return path.join(dir, 'dtp_reports.json');
+}
 
-    CREATE TABLE IF NOT EXISTS settings (
-      key   TEXT PRIMARY KEY,
-      value TEXT
-    );
-  `);
+function getSettingsPath() {
+  const dir = getDataDir();
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  return path.join(dir, 'dtp_settings.json');
+}
+
+// ===== ASOSIY DB TUZILMASI =====
+function loadDb() {
+  const dbPath = getDbPath();
+  if (!fs.existsSync(dbPath)) {
+    const empty = { reports: [], nextId: 1 };
+    fs.writeFileSync(dbPath, JSON.stringify(empty, null, 2), 'utf8');
+    return empty;
+  }
+  try {
+    return JSON.parse(fs.readFileSync(dbPath, 'utf8'));
+  } catch(e) {
+    return { reports: [], nextId: 1 };
+  }
+}
+
+function saveDb(data) {
+  try {
+    fs.writeFileSync(getDbPath(), JSON.stringify(data, null, 2), 'utf8');
+    return true;
+  } catch(e) {
+    console.error('DB saqlashda xatolik:', e.message);
+    return false;
+  }
 }
 
 // ===== HISOBOT SAQLASH =====
-function saveReport(data) {
-  const d = openDB();
-  if (!d) return { success: false, error: 'DB ochilmadi' };
+function saveReport(reportData) {
   try {
-    const existing = d.prepare(
-      'SELECT id FROM reports WHERE report_number = ?'
-    ).get(data.report_number);
+    const db  = loadDb();
+    const now = new Date().toLocaleString('ru-RU');
 
-    if (existing) {
-      d.prepare(`
-        UPDATE reports SET
-          report_date=?, client_name=?, client_phone=?, client_address=?,
-          eval_purpose=?, car_brand=?, car_model=?, car_year=?, car_color=?,
-          car_plate=?, car_vin=?, car_mileage=?, car_body=?, car_engine=?,
-          car_power=?, car_transmission=?, car_drive=?, car_value_before=?,
-          car_wear=?, car_residual=?, dtp_date=?, dtp_place=?, dtp_ref=?,
-          expert_name=?, expert_position=?, expert_cert=?, expert_exp=?,
-          parts_json=?, works_json=?, materials_json=?,
-          parts_total=?, works_total=?, materials_total=?, grand_total=?,
-          car_photo=?, lang=?,
-          updated_at=datetime('now','localtime')
-        WHERE report_number=?
-      `).run(
-        data.report_date, data.client_name, data.client_phone,
-        data.client_address, data.eval_purpose, data.car_brand, data.car_model,
-        data.car_year, data.car_color, data.car_plate, data.car_vin,
-        data.car_mileage, data.car_body, data.car_engine, data.car_power,
-        data.car_transmission, data.car_drive, data.car_value_before,
-        data.car_wear, data.car_residual, data.dtp_date, data.dtp_place,
-        data.dtp_ref, data.expert_name, data.expert_position, data.expert_cert,
-        data.expert_exp,
-        JSON.stringify(data.parts || []),
-        JSON.stringify(data.works || []),
-        JSON.stringify(data.materials || []),
-        data.parts_total, data.works_total, data.materials_total,
-        data.grand_total, data.car_photo || null, data.lang || 'ru',
-        data.report_number
-      );
-      return { success: true, id: existing.id, updated: true };
-    } else {
-      const result = d.prepare(`
-        INSERT INTO reports (
-          report_number, report_date, client_name, client_phone, client_address,
-          eval_purpose, car_brand, car_model, car_year, car_color, car_plate,
-          car_vin, car_mileage, car_body, car_engine, car_power, car_transmission,
-          car_drive, car_value_before, car_wear, car_residual, dtp_date,
-          dtp_place, dtp_ref, expert_name, expert_position, expert_cert,
-          expert_exp, parts_json, works_json, materials_json,
-          parts_total, works_total, materials_total, grand_total, car_photo, lang
-        ) VALUES (
-          ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?
-        )
-      `).run(
-        data.report_number, data.report_date, data.client_name,
-        data.client_phone, data.client_address, data.eval_purpose,
-        data.car_brand, data.car_model, data.car_year, data.car_color,
-        data.car_plate, data.car_vin, data.car_mileage, data.car_body,
-        data.car_engine, data.car_power, data.car_transmission, data.car_drive,
-        data.car_value_before, data.car_wear, data.car_residual,
-        data.dtp_date, data.dtp_place, data.dtp_ref,
-        data.expert_name, data.expert_position, data.expert_cert, data.expert_exp,
-        JSON.stringify(data.parts || []),
-        JSON.stringify(data.works || []),
-        JSON.stringify(data.materials || []),
-        data.parts_total, data.works_total, data.materials_total,
-        data.grand_total, data.car_photo || null, data.lang || 'ru'
-      );
-      return { success: true, id: result.lastInsertRowid, updated: false };
+    // Mavjud hisobotni yangilash
+    const existingIdx = db.reports.findIndex(
+      r => r.report_number === reportData.report_number
+    );
+
+    if (existingIdx !== -1) {
+      db.reports[existingIdx] = {
+        ...db.reports[existingIdx],
+        ...reportData,
+        updated_at: now
+      };
+      saveDb(db);
+      return { success: true, id: db.reports[existingIdx].id, updated: true };
     }
-  } catch (e) {
+
+    // Yangi hisobot qo'shish
+    const newReport = {
+      id:         db.nextId,
+      ...reportData,
+      created_at: now,
+      updated_at: now
+    };
+
+    db.reports.unshift(newReport); // eng yangi birinchi
+    db.nextId += 1;
+    saveDb(db);
+    return { success: true, id: newReport.id, updated: false };
+
+  } catch(e) {
     return { success: false, error: e.message };
   }
 }
 
 // ===== BARCHA HISOBOTLAR RO'YXATI =====
 function getAllReports() {
-  const d = openDB();
-  if (!d) return [];
   try {
-    return d.prepare(`
-      SELECT id, report_number, report_date, client_name, car_brand,
-             car_model, car_year, car_plate, grand_total, lang, created_at
-      FROM reports
-      ORDER BY id DESC
-    `).all();
-  } catch (e) {
+    const db = loadDb();
+    return db.reports.map(r => ({
+      id:            r.id,
+      report_number: r.report_number,
+      report_date:   r.report_date,
+      client_name:   r.client_name,
+      car_brand:     r.car_brand,
+      car_model:     r.car_model,
+      car_year:      r.car_year,
+      car_plate:     r.car_plate,
+      grand_total:   r.grand_total,
+      lang:          r.lang || 'ru',
+      created_at:    r.created_at
+    }));
+  } catch(e) {
     return [];
   }
 }
 
-// ===== BITTA HISOBOT YUKLASH =====
+// ===== BITTA HISOBOT =====
 function getReportById(id) {
-  const d = openDB();
-  if (!d) return null;
   try {
-    const row = d.prepare('SELECT * FROM reports WHERE id = ?').get(id);
-    if (!row) return null;
-    row.parts     = JSON.parse(row.parts_json     || '[]');
-    row.works     = JSON.parse(row.works_json     || '[]');
-    row.materials = JSON.parse(row.materials_json || '[]');
-    return row;
-  } catch (e) {
+    const db  = loadDb();
+    const row = db.reports.find(r => r.id === id);
+    return row || null;
+  } catch(e) {
     return null;
   }
 }
 
 // ===== HISOBOTNI O'CHIRISH =====
 function deleteReport(id) {
-  const d = openDB();
-  if (!d) return { success: false };
   try {
-    d.prepare('DELETE FROM reports WHERE id = ?').run(id);
+    const db  = loadDb();
+    const len = db.reports.length;
+    db.reports = db.reports.filter(r => r.id !== id);
+    if (db.reports.length === len) return { success: false, error: 'Topilmadi' };
+    saveDb(db);
     return { success: true };
-  } catch (e) {
+  } catch(e) {
     return { success: false, error: e.message };
   }
 }
 
 // ===== SOZLAMALAR =====
 function getSetting(key, defaultVal = '') {
-  const d = openDB();
-  if (!d) return defaultVal;
   try {
-    const row = d.prepare('SELECT value FROM settings WHERE key = ?').get(key);
-    return row ? row.value : defaultVal;
-  } catch (e) {
+    const p = getSettingsPath();
+    if (!fs.existsSync(p)) return defaultVal;
+    const settings = JSON.parse(fs.readFileSync(p, 'utf8'));
+    return settings[key] !== undefined ? settings[key] : defaultVal;
+  } catch(e) {
     return defaultVal;
   }
 }
 
 function setSetting(key, value) {
-  const d = openDB();
-  if (!d) return;
   try {
-    d.prepare(
-      'INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)'
-    ).run(key, String(value));
-  } catch (e) {}
+    const p = getSettingsPath();
+    let settings = {};
+    if (fs.existsSync(p)) {
+      settings = JSON.parse(fs.readFileSync(p, 'utf8'));
+    }
+    settings[key] = value;
+    fs.writeFileSync(p, JSON.stringify(settings, null, 2), 'utf8');
+  } catch(e) {}
 }
 
 // ===== STATISTIKA =====
 function getStats() {
-  const d = openDB();
-  if (!d) return { total: 0, thisMonth: 0, totalSum: '0' };
   try {
-    const total = d.prepare('SELECT COUNT(*) as c FROM reports').get().c;
-    const month = d.prepare(
-      "SELECT COUNT(*) as c FROM reports WHERE strftime('%Y-%m', created_at) = strftime('%Y-%m', 'now', 'localtime')"
-    ).get().c;
+    const db    = loadDb();
+    const total = db.reports.length;
+
+    const now   = new Date();
+    const month = db.reports.filter(r => {
+      if (!r.created_at) return false;
+      try {
+        // "29.05.2026, 18:30:00" formatini parse qilish
+        const parts = r.created_at.split(', ')[0].split('.');
+        const rDate = new Date(parts[2], parts[1] - 1, parts[0]);
+        return rDate.getFullYear() === now.getFullYear() &&
+               rDate.getMonth()    === now.getMonth();
+      } catch(e) { return false; }
+    }).length;
+
     return { total, thisMonth: month };
-  } catch (e) {
+  } catch(e) {
     return { total: 0, thisMonth: 0 };
   }
 }
 
 module.exports = {
-  openDB, saveReport, getAllReports,
-  getReportById, deleteReport,
-  getSetting, setSetting, getStats
+  saveReport,
+  getAllReports,
+  getReportById,
+  deleteReport,
+  getSetting,
+  setSetting,
+  getStats
 };
