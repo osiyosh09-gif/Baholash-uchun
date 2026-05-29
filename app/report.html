@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Отчёт об оценке ущерба АТС</title>
+  <link rel="stylesheet" href="report.css">
+</head>
+<body>
+
+
+<!-- ========== ВАРАҚ 1: ТИТУЛЬНЫЙ ЛИСТ ========== -->
+<div class="page page-1">
+  <div class="page-border">
+    <div class="title-header">
+      <div class="title-logo-block">
+        <div class="title-logo-circle">TBV</div>
+        <div class="title-org">
+          <div class="title-org-name">ООО «THE BEST VALUATION»</div>
+          <div class="title-org-sub">Лицензированная оценочная компания</div>
+        </div>
+      </div>
+      <div class="title-stamp-area">[Печать]</div>
+    </div>
+
+    <div class="title-car-image">
+      <div class="car-image-placeholder">
+        <span>🚗</span>
+        <p>Фотография транспортного средства</p>
+      </div>
+    </div>
+
+    <div class="title-main">
+      <div class="title-label">ОТЧЁТ ОБ ОЦЕНКЕ</div>
+      <div class="title-sublabel">рыночной стоимости восстановительного ущерба</div>
+      <div class="title-sublabel">автомототранспортного средства (АМТС)</div>
+    </div>
+
+    <div class="title-car-name" id="t1-car-name">—</div>
+
+    <div class="title-info-grid">
+      <div class="title-info-row">
+        <span class="ti-label">Отчёт №:</span>
+        <span class="ti-dots"></span>
+        <span class="ti-value" id="t1-report-number">—</span>
+      </div>
+      <div class="title-info-row">
+        <span class="ti-label">Дата составления:</span>
+        <span class="ti-dots"></span>
+        <span class="ti-value" id="t1-report-date">—</span>
+      </div>
+      <div class="title-info-row">
+        <span class="ti-label">Заказчик:</span>
+        <span class="ti-dots"></span>
+        <span class="ti-value" id="t1-client-name">—</span>
+      </div>
+      <div class="title-info-row">
+        <span class="ti-label">Гос. номер:</span>
+        <span class="ti-dots"></span>
+        <span class="ti-value" id="t1-car-plate">—</span>
+      </div>
+      <div class="title-info-row">
+        <span class="ti-label">Сумма ущерба:</span>
+        <span class="ti-dots"></span>
+        <span class="ti-value ti-value-total" id="t1-grand-total">—</span>
+      </div>
+    </div>
+
+    <div class="title-footer">
+      <div class="title-footer-city">г. Ташкент, <span id="t1-year">2026</span> год</div>
+      <div class="title-footer-conf">КОНФИДЕНЦИАЛЬНО</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ========== ВАРАҚ 2: СОДЕРЖАНИЕ ========== -->
+<div class="page page-2">
+  <div class="page-header-bar">
+    <span>ООО «THE BEST VALUATION»</span>
+    <span>Отчёт № <span class="ph-number">—</span></span>
+  </div>
+  <h2 class="page-title">СОДЕРЖАНИЕ</h2>
+  <table class="toc-table">
+    <tbody>
+      <tr><td class="toc-num">1.</td><td class="toc-item">Титульный лист</td><td class="toc-dots"></td><td class="toc-page">1</td></tr>
+      <tr><td class="toc-num">2.</td><td class="toc-item">Содержание</td><td class="toc-dots"></td><td class="toc-page">2</td></tr>
+      <tr><td class="toc-num">3.</td><td class="toc-item">Сопроводительное письмо</td><td class="toc-dots"></td><td class="toc-page">3</td></tr>
+      <tr><td class="toc-num">4.</td><td class="toc-item">Идентификация АМТС. Основные параметры</td><td class="toc-dots"></td><td class="toc-page">4</td></tr>
+      <tr><td class="toc-num">5.</td><td class="toc-item">Атамалар ва тартиб. Формула Андрианова</td><td class="toc-dots"></td><td class="toc-page">5</td></tr>
+      <tr><td class="toc-num">6.</td><td class="toc-item">Ёндашувлар ва хулосалар. Вущ формуласи</td><td class="toc-dots"></td><td class="toc-page">6</td></tr>
+      <tr><td class="toc-num">7.</td><td class="toc-item">Мутахассис маълумотлари ва ҳужжатлар</td><td class="toc-dots"></td><td class="toc-page">7</td></tr>
+      <tr><td class="toc-num">8.</td><td class="toc-item">Калькуляция ущерба (запчасти, работы, материалы)</td><td class="toc-dots"></td><td class="toc-page">8</td></tr>
+      <tr><td class="toc-num">9.</td><td class="toc-item">Основания для проведения оценки</td><td class="toc-dots"></td><td class="toc-page">—</td></tr>
+      <tr><td class="toc-num">10.</td><td class="toc-item">Применяемые стандарты и методология</td><td class="toc-dots"></td><td class="toc-page">—</td></tr>
+      <tr><td class="toc-num">11.</td><td class="toc-item">Анализ рынка автомобилей</td><td class="toc-dots"></td><td class="toc-page">—</td></tr>
+      <tr><td class="toc-num">12.</td><td class="toc-item">Расчёт физического износа</td><td class="toc-dots"></td><td class="toc-page">—</td></tr>
+      <tr><td class="toc-num">13.</td><td class="toc-item">Определение рыночной стоимости до ДТП</td><td class="toc-dots"></td><td class="toc-page">—</td></tr>
+      <tr><td class="toc-num">14.</td><td class="toc-item">Итоговое заключение об ущербе</td><td class="toc-dots"></td><td class="toc-page">—</td></tr>
+      <tr><td class="toc-num">15.</td><td class="toc-item">Приложения и документы</td><td class="toc-dots"></td><td class="toc-page">—</td></tr>
+    </tbody>
+  </table>
+  <div class="page-footer-bar">
+    <span id="p2-report-date">—</span>
+    <span>Страница 2</span>
+  </div>
+</div>
+
+
+<!-- ========== ВАРАҚ 3: СОПРОВОДИТЕЛЬНОЕ ПИСЬМО ========== -->
+<div class="page page-3">
+  <div class="page-header-bar">
+    <span>ООО «THE BEST VALUATION»</span>
+    <span>Отчёт № <span class="ph-number">—</span></span>
+  </div>
+  <h2 class="page-title">СОПРОВОДИТЕЛЬНОЕ ПИСЬМО</h2>
+
+  <div class="letter-block">
+    <p class="letter-to">Кому: <strong id="p3-client-name">—</strong></p>
+    <p class="letter-from">От: ООО «THE BEST VALUATION», г. Ташкент</p>
+    <p class="letter-date">Дата: <span id="p3-report-date">—</span></p>
+  </div>
+
+  <div class="letter-body">
+    <p>Уважаемый(ая) <span class="bold" id="p3-client-name2">—</span>,</p>
+    <br>
+    <p>В соответствии с Вашим заказом нами была проведена оценка рыночной стоимости восстановительного ущерба автомототранспортного средства:</p>
+    <br>
+    <p class="letter-car" id="p3-car-full">—</p>
+    <br>
+    <p>Государственный регистрационный знак: <strong id="p3-car-plate">—</strong></p>
+    <p>Дата дорожно-транспортного происшествия: <strong id="p3-dtp-date">—</strong></p>
+    <p>Место ДТП: <strong id="p3-dtp-place">—</strong></p>
+    <br>
+    <p>По результатам проведённой оценки установлено, что рыночная стоимость восстановительного ущерба (затраты на восстановительный ремонт с учётом износа) составляет:</p>
+    <br>
+    <div class="letter-total-box">
+      <div class="letter-total-num" id="p3-grand-total">—</div>
+      <div class="letter-total-words" id="p3-grand-words">—</div>
+    </div>
+    <br>
+    <p>Настоящий отчёт составлен в соответствии с действующим законодательством Республики Узбекистан об оценочной деятельности и применимыми стандартами оценки.</p>
+    <br>
+    <p>Отчёт предназначен исключительно для использования в целях, указанных в задании на оценку, и не может быть использован иными лицами или в иных целях без письменного согласия оценщика.</p>
+  </div>
+
+  <div class="letter-sign">
+    <div class="sign-block">
+      <div class="sign-line"></div>
+      <div class="sign-name" id="p3-expert-name">—</div>
+      <div class="sign-title" id="p3-expert-position">Сертифицированный оценщик</div>
+      <div class="sign-cert">Сертификат № <span id="p3-expert-cert">—</span></div>
+    </div>
+    <div class="sign-stamp">[М.П.]</div>
+  </div>
+  <div class="page-footer-bar">
+    <span id="p3-date-footer">—</span>
+    <span>Страница 3</span>
+  </div>
+</div>
+
+
+<!-- ========== ВАРАҚ 4: ИДЕНТИФИКАЦИЯ АМТС ========== -->
+<div class="page page-4">
+  <div class="page-header-bar">
+    <span>ООО «THE BEST VALUATION»</span>
+    <span>Отчёт № <span class="ph-number">—</span></span>
+  </div>
+  <h2 class="page-title">ИДЕНТИФИКАЦИЯ АМТС И ОСНОВНЫЕ ПАРАМЕТРЫ</h2>
+
+  <table class="ident-table">
+    <thead>
+      <tr><th colspan="2">Сведения об автомототранспортном средстве</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="it-label">Марка / Модель</td><td class="it-value" id="p4-car-full">—</td></tr>
+      <tr><td class="it-label">Год выпуска</td><td class="it-value" id="p4-car-year">—</td></tr>
+      <tr><td class="it-label">Цвет</td><td class="it-value" id="p4-car-color">—</td></tr>
+      <tr><td class="it-label">Гос. регистрационный знак</td><td class="it-value" id="p4-car-plate">—</td></tr>
+      <tr><td class="it-label">VIN номер</td><td class="it-value" id="p4-car-vin">—</td></tr>
+      <tr><td class="it-label">Тип кузова</td><td class="it-value" id="p4-car-body">—</td></tr>
+      <tr><td class="it-label">Объём двигателя</td><td class="it-value" id="p4-car-engine">— л</td></tr>
+      <tr><td class="it-label">Мощность двигателя</td><td class="it-value" id="p4-car-power">— л.с.</td></tr>
+      <tr><td class="it-label">Коробка передач</td><td class="it-value" id="p4-car-transmission">—</td></tr>
+      <tr><td class="it-label">Привод</td><td class="it-value" id="p4-car-drive">—</td></tr>
+      <tr><td class="it-label">Пробег на дату оценки</td><td class="it-value" id="p4-car-mileage">— км</td></tr>
+    </tbody>
+  </table>
+
+  <table class="ident-table" style="margin-top:16px">
+    <thead>
+      <tr><th colspan="2">Сведения о дорожно-транспортном происшествии</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="it-label">Дата ДТП</td><td class="it-value" id="p4-dtp-date">—</td></tr>
+      <tr><td class="it-label">Место ДТП</td><td class="it-value" id="p4-dtp-place">—</td></tr>
+      <tr><td class="it-label">Номер справки о ДТП</td><td class="it-value" id="p4-dtp-ref">—</td></tr>
+      <tr><td class="it-label">Заказчик оценки</td><td class="it-value" id="p4-client-name">—</td></tr>
+      <tr><td class="it-label">Цель оценки</td><td class="it-value" id="p4-eval-purpose">—</td></tr>
+      <tr><td class="it-label">Дата составления отчёта</td><td class="it-value" id="p4-report-date">—</td></tr>
+      <tr><td class="it-label">Номер отчёта</td><td class="it-value" id="p4-report-number">—</td></tr>
+    </tbody>
+  </table>
+
+  <table class="ident-table" style="margin-top:16px">
+    <thead>
+      <tr><th colspan="2">Стоимостные параметры</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="it-label">Рыночная стоимость до ДТП</td><td class="it-value" id="p4-value-before">—</td></tr>
+      <tr><td class="it-label">Физический износ (%)</td><td class="it-value" id="p4-car-wear">—</td></tr>
+      <tr><td class="it-label">Остаточная стоимость</td><td class="it-value" id="p4-car-residual">—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer-bar">
+    <span id="p4-date-footer">—</span>
+    <span>Страница 4</span>
+  </div>
+</div>
+
+
+<!-- ========== ВАРАҚ 5: АТАМАЛАР ВА АНДРИАНОВ ФОРМУЛАСИ ========== -->
+<div class="page page-5">
+  <div class="page-header-bar">
+    <span>ООО «THE BEST VALUATION»</span>
+    <span>Отчёт № <span class="ph-number">—</span></span>
+  </div>
+  <h2 class="page-title">АТАМАЛАР, ТАРТИБ ВА АНДРИАНОВ ФОРМУЛАСИ</h2>
+
+  <h3 class="section-h3">1. Асосий атамалар</h3>
+  <table class="terms-table">
+    <thead><tr><th>Атама</th><th>Таъриф</th></tr></thead>
+    <tbody>
+      <tr><td>АМТС</td><td>Автомототранспорт воситаси</td></tr>
+      <tr><td>ДТП</td><td>Йўл-транспорт ҳодисаси (Дорожно-транспортное происшествие)</td></tr>
+      <tr><td>Вщ</td><td>Восстановительный ущерб — тиклаш харажатлари суммаси</td></tr>
+      <tr><td>Свос</td><td>Стоимость восстановления — янгилаш нархи</td></tr>
+      <tr><td>Собновл</td><td>Стоимость обновления — эскирган қисмлар нархи</td></tr>
+      <tr><td>ИФ%</td><td>Индекс физического износа — жисмоний эскириш фоизи</td></tr>
+      <tr><td>Ω (Омега)</td><td>Умумий эскириш коэффициенти</td></tr>
+      <tr><td>Трин</td><td>Транспортное средство в нормальном состоянии</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-h3" style="margin-top:18px">2. Андрианов формуласи</h3>
+  <div class="formula-box">
+    <div class="formula-title">Физик эскириш индекси (ИФ%)</div>
+    <div class="formula-main">ИФ% = (1 − e<sup>−Ω·T</sup>) × 100%</div>
+    <div class="formula-vars">
+      <div class="fv-row"><span class="fv-sym">Ω</span><span class="fv-eq">=</span><span class="fv-desc">Умумий эскириш коэффициенти (йиллик)</span></div>
+      <div class="fv-row"><span class="fv-sym">T</span><span class="fv-eq">=</span><span class="fv-desc">АТС ёши (йилларда)</span></div>
+      <div class="fv-row"><span class="fv-sym">e</span><span class="fv-eq">=</span><span class="fv-desc">Эйлер сони (2,71828...)</span></div>
+    </div>
+  </div>
+
+  <div class="formula-box" style="margin-top:14px">
+    <div class="formula-title">Ушбу отчёт бўйича ҳисоблаш</div>
+    <div class="formula-calc-row">
+      <span class="fc-label">АТС ёши (T):</span>
+      <span class="fc-value" id="p5-car-age">— йил</span>
+    </div>
+    <div class="formula-calc-row">
+      <span class="fc-label">Физик эскириш (ИФ%):</span>
+      <span class="fc-value" id="p5-car-wear">—%</span>
+    </div>
+    <div class="formula-calc-row">
+      <span class="fc-label">Бозор нархи (то ДТП):</span>
+      <span class="fc-value" id="p5-value-before">— сум</span>
+    </div>
+    <div class="formula-calc-row">
+      <span class="fc-label">Қолдиқ қиймат:</span>
+      <span class="fc-value" id="p5-car-residual">— сум</span>
+    </div>
+  </div>
+
+  <h3 class="section-h3" style="margin-top:18px">3. Баҳолаш тартиби</h3>
+  <ol class="procedure-list">
+    <li>АТС идентификацияси ва ҳужжатларни текшириш</li>
+    <li>ДТП шароитларини аниқлаш (справка, фотоматериаллар)</li>
+    <li>Зарарланган деталларни кўздан кечириш ва рўйхатга олиш</li>
+    <li>Бозор нархларини таҳлил қилиш (эҳтиёт қисмлар ва ишлар)</li>
+    <li>Физик эскиришни Андрианов формуласи орқали ҳисоблаш</li>
+    <li>Тиклаш харажатларини ҳисоблаш калькуляцияси</li>
+    <li>Якуний хулосани расмийлаштириш</li>
+  </ol>
+
+  <div class="page-footer-bar">
+    <span id="p5-date-footer">—</span>
+    <span>Страница 5</span>
+  </div>
+</div>
+
+
+<!-- ========== ВАРАҚ 6: ЁНДАШУВЛАР ВА ХУЛОСАЛАР ========== -->
+<div class="page page-6">
+  <div class="page-header-bar">
+    <span>ООО «THE BEST VALUATION»</span>
+    <span>Отчёт № <span class="ph-number">—</span></span>
+  </div>
+  <h2 class="page-title">ЁНДАШУВЛАР ВА ХУЛОСАЛАР</h2>
+
+  <h3 class="section-h3">1. Қўлланилган ёндашувлар</h3>
+  <table class="approach-table">
+    <thead><tr><th>Ёндашув</th><th>Қўлланилдими?</th><th>Изоҳ</th></tr></thead>
+    <tbody>
+      <tr><td>Харажатлар ёндашуви (Затратный)</td><td class="approach-yes">✔ Ҳа</td><td>Асосий усул — тиклаш харажатлари</td></tr>
+      <tr><td>Бозор ёндашуви (Рыночный)</td><td class="approach-part">◑ Қисман</td><td>Таққослаш учун ишлатилган</td></tr>
+      <tr><td>Даромад ёндашуви (Доходный)</td><td class="approach-no">✗ Йўқ</td><td>АТС зарари учун мос эмас</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-h3" style="margin-top:18px">2. Вущ = Свос − Собновл формуласи</h3>
+  <div class="formula-box">
+    <div class="formula-title">Восстановительный ущерб (Вщ)</div>
+    <div class="formula-main">Вщ = Свос − Собновл</div>
+    <div class="formula-vars">
+      <div class="fv-row"><span class="fv-sym">Свос</span><span class="fv-eq">=</span><span class="fv-desc">Стоимость восстановления (запчасти + работы + материалы)</span></div>
+      <div class="fv-row"><span class="fv-sym">Собновл</span><span class="fv-eq">=</span><span class="fv-desc">Стоимость обновления (эскириш ҳисобга олинган)</span></div>
+    </div>
+  </div>
+
+  <table class="calc-summary-table" style="margin-top:16px">
+    <thead><tr><th>Компонент</th><th>Сумма (сум)</th></tr></thead>
+    <tbody>
+      <tr><td>Запчасти (эҳтиёт қисмлар)</td><td id="p6-parts-total">—</td></tr>
+      <tr><td>Ремонтные работы (таъмирлаш ишлари)</td><td id="p6-works-total">—</td></tr>
+      <tr><td>Материалы (материаллар)</td><td id="p6-materials-total">—</td></tr>
+      <tr class="calc-subtotal"><td>Свос (умумий тиклаш нархи)</td><td id="p6-grand-total">—</td></tr>
+      <tr><td>Физический износ (<span id="p6-wear">—</span>%)</td><td id="p6-wear-amount">—</td></tr>
+      <tr class="calc-final"><td><strong>Вщ — Якуний зарар суммаси</strong></td><td id="p6-vshch">—</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-h3" style="margin-top:18px">3. Хулосалар</h3>
+  <div class="conclusion-box">
+    <p>Баҳолаш натижаларига кўра, <strong id="p6-car-full">—</strong> (гос. номер: <strong id="p6-car-plate">—</strong>) автомобилининг <strong id="p6-dtp-date">—</strong> санасидаги ДТП оқибатида юзага келган тиклаш ущерби қуйидагича аниқланди:</p>
+    <div class="conclusion-total">
+      <span>ИТОГО УЩЕРБ:</span>
+      <strong id="p6-conclusion-total">—</strong>
+    </div>
+    <div class="conclusion-words" id="p6-conclusion-words">—</div>
+  </div>
+
+  <div class="page-footer-bar">
+    <span id="p6-date-footer">—</span>
+    <span>Страница 6</span>
+  </div>
+</div>
+
+
+<!-- ========== ВАРАҚ 7: МУТАХАССИС ВА ҲУЖЖАТЛАР ========== -->
+<div class="page page-7">
+  <div class="page-header-bar">
+    <span>ООО «THE BEST VALUATION»</span>
+    <span>Отчёт № <span class="ph-number">—</span></span>
+  </div>
+  <h2 class="page-title">МУТАХАССИС МАЪЛУМОТЛАРИ ВА ҲУЖЖАТЛАР РЎЙХАТИ</h2>
+
+  <h3 class="section-h3">1. Оценщик (Баҳоловчи)</h3>
+  <table class="ident-table">
+    <tbody>
+      <tr><td class="it-label">ФИО оценщика</td><td class="it-value" id="p7-expert-name">—</td></tr>
+      <tr><td class="it-label">Должность</td><td class="it-value" id="p7-expert-position">—</td></tr>
+      <tr><td class="it-label">Номер сертификата</td><td class="it-value" id="p7-expert-cert">—</td></tr>
+      <tr><td class="it-label">Стаж работы</td><td class="it-value" id="p7-expert-exp">— лет</td></tr>
+      <tr><td class="it-label">Организация</td><td class="it-value">ООО «THE BEST VALUATION»</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-h3" style="margin-top:18px">2. Приложения (Ҳужжатлар рўйхати)</h3>
+  <table class="docs-table">
+    <thead><tr><th>№</th><th>Ҳужжат номи</th><th>Эслатма</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Техник паспорт (СТС / ТС)</td><td>Нусха</td></tr>
+      <tr><td>2</td><td>ДТП бўйича маълумотнома (Справка о ДТП)</td><td>Нусха</td></tr>
+      <tr><td>3</td><td>Осмотр АТС акти</td><td>Аслнусха</td></tr>
+      <tr><td>4</td><td>Фотоматериаллар (зарарланган жойлар)</td><td>Илова</td></tr>
+      <tr><td>5</td><td>Баҳолаш шартномаси</td><td>Аслнусха</td></tr>
+      <tr><td>6</td><td>Оценщик сертификати</td><td>Нусха</td></tr>
+      <tr><td>7</td><td>Калькуляция (запчасти ва ишлар)</td><td>8-варақ</td></tr>
+      <tr><td>8</td><td>Лицензия ООО «THE BEST VALUATION»</td><td>Нусха</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="section-h3" style="margin-top:18px">3. Заявление оценщика</h3>
+  <div class="declaration-box">
+    <p>Мен, қуйида имзо чеккан баҳоловчи, ушбу отчётда баён этилган барча маълумотлар тўғри ва холис эканлигини тасдиқлайман. Баҳолаш Ўзбекистон Республикасининг баҳолаш фаолиятига оид қонунчилиги ва амалдаги стандартлар асосида амалга оширилди.</p>
+  </div>
+
+  <div class="expert-sign-block">
+    <div class="esb-left">
+      <div class="esb-label">Оценщик:</div>
+      <div class="esb-line"></div>
+      <div class="esb-name" id="p7-sign-name">—</div>
+      <div class="esb-date">Дата: <span id="p7-sign-date">—</span></div>
+    </div>
+    <div class="esb-right">
+      <div class="esb-stamp-circle">М.П.</div>
+    </div>
+  </div>
+
+  <div class="page-footer-bar">
+    <span id="p7-date-footer">—</span>
+    <span>Страница 7</span>
+  </div>
+</div>
+
+
+<!-- ========== ВАРАҚ 8: КАЛЬКУЛЯЦИЯ ========== -->
+<div class="page page-8">
+  <div class="page-header-bar">
+    <span>ООО «THE BEST VALUATION»</span>
+    <span>Отчёт № <span class="ph-number">—</span></span>
+  </div>
+  <h2 class="page-title">КАЛЬКУЛЯЦИЯ УЩЕРБА</h2>
+  <div class="calc-subtitle" id="p8-car-full">—</div>
+
+  <!-- Запчасти -->
+  <h3 class="section-h3">1. Запчасти (Эҳтиёт қисмлар)</h3>
+  <table class="calc-table" id="p8-parts-table">
+    <thead>
+      <tr><th>№</th><th>Наименование</th><th>Кол-во</th><th>Цена (сум)</th><th>Сумма (сум)</th></tr>
+    </thead>
+    <tbody id="p8-parts-body">
+      <tr><td colspan="5" class="empty-row">—</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td colspan="4" class="ct-total-label">Итого запчасти:</td><td class="ct-total-value" id="p8-parts-total">—</td></tr>
+    </tfoot>
+  </table>
+
+  <!-- Работы -->
+  <h3 class="section-h3" style="margin-top:14px">2. Ремонтные работы (Таъмирлаш ишлари)</h3>
+  <table class="calc-table" id="p8-works-table">
+    <thead>
+      <tr><th>№</th><th>Наименование работы</th><th>Часы</th><th>Ставка (сум)</th><th>Сумма (сум)</th></tr>
+    </thead>
+    <tbody id="p8-works-body">
+      <tr><td colspan="5" class="empty-row">—</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td colspan="4" class="ct-total-label">Итого работы:</td><td class="ct-total-value" id="p8-works-total">—</td></tr>
+    </tfoot>
+  </table>
+
+  <!-- Материалы -->
+  <h3 class="section-h3" style="margin-top:14px">3. Материалы</h3>
+  <table class="calc-table" id="p8-materials-table">
+    <thead>
+      <tr><th>№</th><th>Наименование</th><th>Кол-во</th><th>Цена (сум)</th><th>Сумма (сум)</th></tr>
+    </thead>
+    <tbody id="p8-materials-body">
+      <tr><td colspan="5" class="empty-row">—</td></tr>
+    </tbody>
+    <tfoot>
+      <tr><td colspan="4" class="ct-total-label">Итого материалы:</td><td class="ct-total-value" id="p8-materials-total">—</td></tr>
+    </tfoot>
+  </table>
+
+  <!-- Якуний жадвал -->
+  <table class="final-summary-table" style="margin-top:16px">
+    <tbody>
+      <tr><td>Запчасти:</td><td id="p8-sum-parts">—</td></tr>
+      <tr><td>Работы:</td><td id="p8-sum-works">—</td></tr>
+      <tr><td>Материалы:</td><td id="p8-sum-materials">—</td></tr>
+      <tr class="fst-grand"><td><strong>ИТОГО УЩЕРБ:</strong></td><td><strong id="p8-grand-total">—</strong></td></tr>
+      <tr><td colspan="2" class="fst-words" id="p8-grand-words">—</td></tr>
+    </tbody>
+  </table>
+
+  <div class="page-footer-bar">
+    <span id="p8-date-footer">—</span>
+    <span>Страница 8</span>
+  </div>
+</div>
+
+<!-- PDF Tugmasi -->
+<div class="print-toolbar no-print">
+  <button class="print-btn" onclick="printReport()">🖨 Чоп этиш / PDF сақлаш</button>
+  <button class="close-btn" onclick="window.close()">✕ Ёпиш</button>
+</div>
+
+<script src="report.js"></script>
+</body>
+</html>
