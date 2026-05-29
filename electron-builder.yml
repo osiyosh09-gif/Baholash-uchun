@@ -1,0 +1,41 @@
+appId: uz.thebestvaluation.dtp
+productName: "DTP Ocenka"
+copyright: "ООО THE BEST VALUATION"
+
+directories:
+  output: dist
+  buildResources: assets
+
+files:
+  - main.js
+  - "app/**/*"
+  - "!app/**/*.map"
+
+extraMetadata:
+  main: main.js
+
+win:
+  target:
+    - target: nsis
+      arch: x64
+    - target: portable
+      arch: x64
+  icon: assets/icon.ico
+  requestedExecutionLevel: asInvoker
+
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: "DTP Ocenka"
+  language: "1049"
+  artifactName: "DTP_Ocenka_Setup_v3.exe"
+  deleteAppDataOnUninstall: false
+
+portable:
+  artifactName: "DTP_Ocenka_Portable_v3.exe"
+
+compression: normal
+nodeGypRebuild: false
+buildDependenciesFromSource: false
