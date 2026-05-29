@@ -1,0 +1,713 @@
+/* ===== RESET & BASE ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --primary:      #1a56db;
+  --primary-dark: #1e429f;
+  --primary-light:#ebf5ff;
+  --text:         #111827;
+  --text-muted:   #4b5563;
+  --border:       #d1d5db;
+  --bg-light:     #f8fafc;
+  --gold:         #b45309;
+  --success:      #065f46;
+  --danger:       #991b1b;
+}
+
+body {
+  font-family: 'Times New Roman', Times, serif;
+  background: #e5e7eb;
+  color: var(--text);
+  font-size: 11pt;
+  line-height: 1.5;
+}
+
+/* ===== PAGE BASE ===== */
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto 20px;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  page-break-after: always;
+  overflow: hidden;
+}
+
+/* ===== PAGE HEADER & FOOTER BARS ===== */
+.page-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 18mm;
+  background: var(--primary-dark);
+  color: white;
+  font-size: 8pt;
+  font-family: 'Segoe UI', sans-serif;
+  letter-spacing: 0.3px;
+}
+
+.page-footer-bar {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 18mm;
+  background: #f1f5f9;
+  border-top: 1px solid var(--border);
+  font-size: 8pt;
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--text-muted);
+}
+
+.page-title {
+  font-size: 13pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-align: center;
+  margin: 14px 18mm 12px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--primary);
+  font-family: 'Segoe UI', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.section-h3 {
+  font-size: 10pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0 18mm 8px;
+  padding-left: 8px;
+  border-left: 3px solid var(--primary);
+}
+
+/* ===== ВАРАҚ 1: ТИТУЛЬНЫЙ ЛИСТ ===== */
+.page-1 { padding: 0; }
+
+.page-border {
+  margin: 8mm;
+  border: 2px solid var(--primary-dark);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 10mm 14mm;
+}
+
+.title-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8mm;
+  padding-bottom: 6mm;
+  border-bottom: 1px solid var(--border);
+}
+
+.title-logo-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title-logo-circle {
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--primary-dark);
+  color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 12pt;
+  font-family: 'Segoe UI', sans-serif;
+  flex-shrink: 0;
+}
+
+.title-org-name {
+  font-size: 13pt; font-weight: 700;
+  color: var(--primary-dark);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title-org-sub {
+  font-size: 8pt; color: var(--text-muted);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title-stamp-area {
+  font-size: 8pt; color: var(--text-muted);
+  border: 1px dashed var(--border);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title-car-image {
+  margin: 4mm 0;
+  height: 45mm;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg-light);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.car-image-placeholder {
+  text-align: center; color: var(--text-muted);
+}
+
+.car-image-placeholder span { font-size: 40pt; display: block; }
+.car-image-placeholder p { font-size: 9pt; font-family: 'Segoe UI', sans-serif; }
+
+.title-main {
+  text-align: center;
+  margin: 6mm 0 4mm;
+}
+
+.title-label {
+  font-size: 20pt; font-weight: 700;
+  color: var(--primary-dark);
+  font-family: 'Segoe UI', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.title-sublabel {
+  font-size: 11pt; color: var(--text-muted);
+  font-family: 'Segoe UI', sans-serif;
+  margin-top: 2px;
+}
+
+.title-car-name {
+  text-align: center;
+  font-size: 14pt; font-weight: 700;
+  color: var(--text);
+  margin: 4mm 0;
+  padding: 6px;
+  background: var(--primary-light);
+  border-radius: 4px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.title-info-grid {
+  margin: 6mm 0;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.title-info-row {
+  display: flex;
+  align-items: center;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 10pt;
+}
+
+.title-info-row:last-child { border-bottom: none; }
+
+.ti-label { font-weight: 600; color: var(--text-muted); min-width: 160px; }
+.ti-dots { flex: 1; border-bottom: 1px dotted var(--border); margin: 0 8px; }
+.ti-value { font-weight: 600; color: var(--text); }
+.ti-value-total { color: var(--primary-dark); font-size: 12pt; font-weight: 700; }
+
+.title-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 6mm;
+  border-top: 1px solid var(--border);
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9pt;
+  color: var(--text-muted);
+}
+
+.title-footer-conf {
+  font-weight: 700; color: var(--danger);
+  border: 1px solid var(--danger);
+  padding: 2px 8px; border-radius: 3px;
+  font-size: 8pt;
+}
+
+
+/* ===== ВАРАҚ 2: СОДЕРЖАНИЕ ===== */
+.toc-table {
+  width: calc(100% - 36mm);
+  margin: 0 18mm;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 10pt;
+}
+
+.toc-table tr { border-bottom: 1px solid #f0f0f0; }
+.toc-table tr:hover { background: var(--bg-light); }
+
+.toc-num  { width: 30px; padding: 6px 4px; font-weight: 700; color: var(--primary-dark); }
+.toc-item { padding: 6px 8px; }
+.toc-dots { border-bottom: 1px dotted var(--border); min-width: 60px; }
+.toc-page { width: 40px; text-align: right; padding: 6px 4px; font-weight: 600; color: var(--text-muted); }
+
+/* ===== ВАРАҚ 3: ПИСЬМО ===== */
+.letter-block {
+  margin: 0 18mm 10px;
+  background: var(--bg-light);
+  border-left: 3px solid var(--primary);
+  padding: 8px 12px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9.5pt;
+}
+
+.letter-block p { margin-bottom: 2px; }
+.letter-to   { font-weight: 600; }
+.letter-from { color: var(--text-muted); }
+.letter-date { color: var(--text-muted); }
+
+.letter-body {
+  margin: 0 18mm;
+  font-size: 10.5pt;
+  line-height: 1.7;
+}
+
+.letter-car {
+  text-align: center;
+  font-weight: 700;
+  font-size: 12pt;
+  color: var(--primary-dark);
+  padding: 4px;
+  background: var(--primary-light);
+  border-radius: 4px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.letter-total-box {
+  border: 2px solid var(--primary-dark);
+  border-radius: 6px;
+  padding: 10px 16px;
+  text-align: center;
+  background: var(--primary-light);
+}
+
+.letter-total-num {
+  font-size: 16pt; font-weight: 700;
+  color: var(--primary-dark);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.letter-total-words {
+  font-size: 10pt; color: var(--text-muted);
+  font-style: italic; margin-top: 4px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.letter-sign {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 10mm 18mm 4mm;
+}
+
+.sign-block { flex: 1; }
+.sign-line  { width: 180px; border-bottom: 1px solid var(--text); margin-bottom: 4px; }
+.sign-name  { font-weight: 700; font-family: 'Segoe UI', sans-serif; font-size: 10pt; }
+.sign-title { font-size: 9pt; color: var(--text-muted); font-family: 'Segoe UI', sans-serif; }
+.sign-cert  { font-size: 8.5pt; color: var(--text-muted); font-family: 'Segoe UI', sans-serif; }
+
+.sign-stamp {
+  width: 70px; height: 70px;
+  border: 2px dashed var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 9pt;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== ВАРАҚ 4: ИДЕНТИФИКАЦИЯ ===== */
+.ident-table {
+  width: calc(100% - 36mm);
+  margin: 0 18mm;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9.5pt;
+}
+
+.ident-table thead tr th {
+  background: var(--primary-dark);
+  color: white;
+  padding: 7px 10px;
+  text-align: left;
+  font-size: 10pt;
+}
+
+.ident-table tbody tr { border-bottom: 1px solid var(--border); }
+.ident-table tbody tr:nth-child(even) { background: var(--bg-light); }
+.ident-table tbody tr:hover { background: #eff6ff; }
+
+.it-label {
+  padding: 6px 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  width: 45%;
+}
+
+.it-value {
+  padding: 6px 10px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+
+/* ===== ВАРАҚ 5: ФОРМУЛАЛАР ===== */
+.formula-box {
+  margin: 0 18mm;
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  padding: 12px 16px;
+  background: var(--primary-light);
+}
+
+.formula-title {
+  font-size: 9pt; font-weight: 700;
+  color: var(--primary-dark);
+  font-family: 'Segoe UI', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.formula-main {
+  font-size: 16pt;
+  font-weight: 700;
+  color: var(--primary-dark);
+  text-align: center;
+  padding: 8px;
+  font-family: 'Cambria Math', 'Times New Roman', serif;
+  background: white;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.formula-vars { display: flex; flex-direction: column; gap: 4px; }
+
+.fv-row {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Segoe UI', sans-serif; font-size: 9.5pt;
+}
+
+.fv-sym { font-weight: 700; color: var(--primary-dark); min-width: 50px; font-size: 11pt; }
+.fv-eq  { color: var(--text-muted); }
+.fv-desc { color: var(--text); }
+
+.formula-calc-row {
+  display: flex; justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px dotted var(--border);
+  font-family: 'Segoe UI', sans-serif; font-size: 10pt;
+}
+
+.formula-calc-row:last-child { border-bottom: none; }
+.fc-label { color: var(--text-muted); }
+.fc-value { font-weight: 700; color: var(--primary-dark); }
+
+.terms-table {
+  width: calc(100% - 36mm);
+  margin: 0 18mm;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9.5pt;
+}
+
+.terms-table thead tr th {
+  background: var(--primary-dark); color: white;
+  padding: 6px 10px; text-align: left;
+}
+
+.terms-table tbody tr { border-bottom: 1px solid var(--border); }
+.terms-table tbody tr:nth-child(even) { background: var(--bg-light); }
+.terms-table td { padding: 5px 10px; }
+.terms-table td:first-child { font-weight: 700; color: var(--primary-dark); width: 100px; }
+
+.procedure-list {
+  margin: 0 18mm;
+  padding-left: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 10pt;
+  line-height: 1.9;
+  color: var(--text);
+}
+
+/* ===== ВАРАҚ 6: ЁНДАШУВЛАР ===== */
+.approach-table {
+  width: calc(100% - 36mm);
+  margin: 0 18mm;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9.5pt;
+}
+
+.approach-table thead tr th {
+  background: var(--primary-dark); color: white;
+  padding: 6px 10px; text-align: left;
+}
+
+.approach-table tbody tr { border-bottom: 1px solid var(--border); }
+.approach-table td { padding: 6px 10px; }
+.approach-yes  { color: var(--success); font-weight: 700; }
+.approach-part { color: var(--gold); font-weight: 700; }
+.approach-no   { color: var(--danger); font-weight: 700; }
+
+.calc-summary-table {
+  width: calc(100% - 36mm);
+  margin: 0 18mm;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 10pt;
+}
+
+.calc-summary-table thead tr th {
+  background: var(--primary-dark); color: white;
+  padding: 6px 10px; text-align: left;
+}
+
+.calc-summary-table tbody tr { border-bottom: 1px solid var(--border); }
+.calc-summary-table tbody tr:nth-child(even) { background: var(--bg-light); }
+.calc-summary-table td { padding: 6px 10px; }
+.calc-summary-table td:last-child { text-align: right; font-weight: 600; }
+
+.calc-subtotal td { background: #fef9c3 !important; font-weight: 700 !important; }
+.calc-final   td {
+  background: var(--primary-light) !important;
+  font-size: 11pt !important;
+  color: var(--primary-dark) !important;
+  border-top: 2px solid var(--primary) !important;
+}
+
+.conclusion-box {
+  margin: 0 18mm;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 10pt;
+  line-height: 1.7;
+  background: var(--bg-light);
+}
+
+.conclusion-total {
+  display: flex; justify-content: space-between;
+  margin-top: 10px; padding: 8px 12px;
+  background: var(--primary-light);
+  border-radius: 4px;
+  font-size: 12pt; font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.conclusion-words {
+  text-align: center;
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: 9.5pt;
+  margin-top: 6px;
+}
+
+
+/* ===== ВАРАҚ 7: МУТАХАССИС ===== */
+.docs-table {
+  width: calc(100% - 36mm);
+  margin: 0 18mm;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9.5pt;
+}
+
+.docs-table thead tr th {
+  background: var(--primary-dark); color: white;
+  padding: 6px 10px; text-align: left;
+}
+
+.docs-table thead tr th:first-child { width: 32px; }
+.docs-table tbody tr { border-bottom: 1px solid var(--border); }
+.docs-table tbody tr:nth-child(even) { background: var(--bg-light); }
+.docs-table td { padding: 5px 10px; }
+.docs-table td:first-child { font-weight: 700; color: var(--primary-dark); text-align: center; }
+.docs-table td:last-child  { color: var(--text-muted); font-size: 9pt; }
+
+.declaration-box {
+  margin: 0 18mm;
+  background: var(--bg-light);
+  border-left: 3px solid var(--gold);
+  padding: 8px 12px;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9.5pt;
+  line-height: 1.7;
+  color: var(--text);
+}
+
+.expert-sign-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin: 8mm 18mm 4mm;
+}
+
+.esb-left { flex: 1; }
+.esb-label { font-size: 9pt; color: var(--text-muted); font-family: 'Segoe UI', sans-serif; margin-bottom: 14px; }
+.esb-line  { width: 200px; border-bottom: 1px solid var(--text); margin-bottom: 4px; }
+.esb-name  { font-weight: 700; font-family: 'Segoe UI', sans-serif; font-size: 10pt; }
+.esb-date  { font-size: 9pt; color: var(--text-muted); font-family: 'Segoe UI', sans-serif; margin-top: 6px; }
+
+.esb-right { margin-left: 20px; }
+.esb-stamp-circle {
+  width: 75px; height: 75px;
+  border: 2px dashed var(--border);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text-muted); font-size: 9pt;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== ВАРАҚ 8: КАЛЬКУЛЯЦИЯ ===== */
+.calc-subtitle {
+  text-align: center;
+  font-size: 10pt; font-weight: 700;
+  color: var(--primary-dark);
+  margin: -6px 18mm 12px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.calc-table {
+  width: calc(100% - 36mm);
+  margin: 0 18mm;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 9pt;
+}
+
+.calc-table thead tr th {
+  background: var(--primary-dark); color: white;
+  padding: 5px 8px; text-align: left;
+}
+
+.calc-table thead tr th:nth-child(1) { width: 28px; }
+.calc-table thead tr th:nth-child(3) { width: 55px; }
+.calc-table thead tr th:nth-child(4) { width: 100px; }
+.calc-table thead tr th:nth-child(5) { width: 100px; }
+
+.calc-table tbody tr { border-bottom: 1px solid var(--border); }
+.calc-table tbody tr:nth-child(even) { background: var(--bg-light); }
+.calc-table td { padding: 5px 8px; }
+.calc-table td:nth-child(1) { text-align: center; font-weight: 700; color: var(--text-muted); }
+.calc-table td:nth-child(3),
+.calc-table td:nth-child(4),
+.calc-table td:nth-child(5) { text-align: right; }
+
+.ct-total-label {
+  text-align: right !important;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 6px 8px !important;
+  border-top: 2px solid var(--border);
+  font-size: 9.5pt;
+}
+
+.ct-total-value {
+  text-align: right;
+  font-weight: 700;
+  color: var(--primary-dark);
+  padding: 6px 8px !important;
+  border-top: 2px solid var(--border);
+  font-size: 10pt;
+}
+
+.empty-row { text-align: center; color: var(--text-muted); padding: 8px; font-style: italic; }
+
+.final-summary-table {
+  width: calc(100% - 36mm);
+  margin: 0 18mm;
+  border-collapse: collapse;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 10pt;
+}
+
+.final-summary-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.final-summary-table td:last-child {
+  text-align: right;
+  font-weight: 600;
+  color: var(--primary-dark);
+}
+
+.fst-grand td {
+  font-size: 12pt !important;
+  background: var(--primary-light) !important;
+  border-top: 2px solid var(--primary) !important;
+  border-bottom: 2px solid var(--primary) !important;
+  color: var(--primary-dark) !important;
+}
+
+.fst-words {
+  text-align: center !important;
+  font-style: italic;
+  color: var(--text-muted) !important;
+  font-size: 9.5pt !important;
+  font-weight: 400 !important;
+  background: var(--bg-light) !important;
+}
+
+/* ===== PRINT TOOLBAR ===== */
+.print-toolbar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px;
+  background: #1f2937;
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.3);
+}
+
+.print-btn, .close-btn {
+  padding: 10px 28px;
+  border: none; border-radius: 6px;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer;
+  font-family: 'Segoe UI', sans-serif;
+  transition: all 0.15s;
+}
+
+.print-btn {
+  background: #1a56db; color: white;
+}
+
+.print-btn:hover { background: #1e429f; }
+
+.close-btn {
+  background: #374151; color: #d1d5db;
+}
+
+.close-btn:hover { background: #4b5563; }
+
+/* ===== @PRINT ===== */
+@media print {
+  body { background: white; margin: 0; padding: 0; }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0;
+    box-shadow: none;
+    page-break-after: always;
+  }
+
+  .no-print,
+  .print-toolbar { display: none !important; }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}

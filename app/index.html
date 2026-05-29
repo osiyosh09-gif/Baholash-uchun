@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ДТП Оценка — THE BEST VALUATION</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app-container">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="header-logo">
+      <div class="logo-circle">TBV</div>
+      <div class="header-titles">
+        <h1>ДТП Оценка</h1>
+        <span>ООО «THE BEST VALUATION» — Система определения ущерба АТС</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-secondary" id="btn-clear">🗑 Очистить</button>
+      <button class="btn btn-primary" id="btn-pdf">📄 Создать PDF</button>
+    </div>
+  </header>
+
+  <!-- MAIN FORM -->
+  <main class="form-container">
+
+    <!-- БЛОК 1: Реквизиты отчёта -->
+    <section class="form-section">
+      <h2 class="section-title">📋 Реквизиты отчёта</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Номер отчёта *</label>
+          <input type="text" id="report_number" placeholder="например: 2026-001" />
+        </div>
+        <div class="form-group">
+          <label>Дата составления *</label>
+          <input type="date" id="report_date" />
+        </div>
+        <div class="form-group">
+          <label>ФИО заказчика *</label>
+          <input type="text" id="client_name" placeholder="Иванов Иван Иванович" />
+        </div>
+        <div class="form-group">
+          <label>Контактный телефон</label>
+          <input type="text" id="client_phone" placeholder="+998 90 000-00-00" />
+        </div>
+        <div class="form-group">
+          <label>Адрес заказчика</label>
+          <input type="text" id="client_address" placeholder="г. Ташкент, ул. ..." />
+        </div>
+        <div class="form-group">
+          <label>Цель оценки</label>
+          <input type="text" id="eval_purpose" placeholder="Определение рыночной стоимости ущерба" />
+        </div>
+      </div>
+    </section>
+
+    <!-- БЛОК 2: Идентификация АМТС -->
+    <section class="form-section">
+      <h2 class="section-title">🚗 Идентификация АМТС</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Марка автомобиля *</label>
+          <input type="text" id="car_brand" placeholder="например: Chevrolet" />
+        </div>
+        <div class="form-group">
+          <label>Модель *</label>
+          <input type="text" id="car_model" placeholder="например: Nexia 3" />
+        </div>
+        <div class="form-group">
+          <label>Год выпуска *</label>
+          <input type="number" id="car_year" placeholder="2020" min="1990" max="2026" />
+        </div>
+        <div class="form-group">
+          <label>Цвет</label>
+          <input type="text" id="car_color" placeholder="Белый" />
+        </div>
+        <div class="form-group">
+          <label>Гос. номер *</label>
+          <input type="text" id="car_plate" placeholder="01 A 000 AA" />
+        </div>
+        <div class="form-group">
+          <label>VIN номер</label>
+          <input type="text" id="car_vin" placeholder="KMHXX51BXBU012345" />
+        </div>
+        <div class="form-group">
+          <label>Пробег (км)</label>
+          <input type="number" id="car_mileage" placeholder="75000" />
+        </div>
+        <div class="form-group">
+          <label>Тип кузова</label>
+          <select id="car_body">
+            <option value="Седан">Седан</option>
+            <option value="Хэтчбек">Хэтчбек</option>
+            <option value="Универсал">Универсал</option>
+            <option value="Внедорожник">Внедорожник</option>
+            <option value="Минивэн">Минивэн</option>
+            <option value="Пикап">Пикап</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Объём двигателя (л)</label>
+          <input type="text" id="car_engine" placeholder="1.5" />
+        </div>
+        <div class="form-group">
+          <label>Мощность (л.с.)</label>
+          <input type="number" id="car_power" placeholder="105" />
+        </div>
+        <div class="form-group">
+          <label>КПП</label>
+          <select id="car_transmission">
+            <option value="Механическая">Механическая</option>
+            <option value="Автоматическая">Автоматическая</option>
+            <option value="Вариатор">Вариатор</option>
+            <option value="Роботизированная">Роботизированная</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Привод</label>
+          <select id="car_drive">
+            <option value="Передний">Передний</option>
+            <option value="Задний">Задний</option>
+            <option value="Полный">Полный</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <!-- БЛОК 3: Стоимость автомобиля -->
+    <section class="form-section">
+      <h2 class="section-title">💰 Стоимость автомобиля</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Рыночная стоимость до ДТП (сум) *</label>
+          <input type="number" id="car_value_before" placeholder="80000000" />
+        </div>
+        <div class="form-group">
+          <label>Износ (%)</label>
+          <input type="number" id="car_wear" placeholder="25" min="0" max="100" id="car_wear" />
+        </div>
+        <div class="form-group">
+          <label>Остаточная стоимость (сум)</label>
+          <input type="number" id="car_residual" placeholder="автоматически" readonly />
+        </div>
+        <div class="form-group">
+          <label>Дата ДТП</label>
+          <input type="date" id="dtp_date" />
+        </div>
+        <div class="form-group">
+          <label>Место ДТП</label>
+          <input type="text" id="dtp_place" placeholder="г. Ташкент, ул. Амира Темура" />
+        </div>
+        <div class="form-group">
+          <label>Номер справки ДТП</label>
+          <input type="text" id="dtp_ref" placeholder="№ 12345" />
+        </div>
+      </div>
+    </section>
+
+    <!-- БЛОК 4: Калькуляция ущерба -->
+    <section class="form-section">
+      <h2 class="section-title">🔧 Калькуляция ущерба</h2>
+
+      <!-- Запчасти -->
+      <h3 class="subsection-title">Запчасти</h3>
+      <div class="table-wrapper">
+        <table class="damage-table" id="parts-table">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Наименование</th>
+              <th>Кол-во</th>
+              <th>Цена (сум)</th>
+              <th>Сумма (сум)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="parts-body">
+            <tr>
+              <td>1</td>
+              <td><input type="text" placeholder="Бампер передний" /></td>
+              <td><input type="number" value="1" min="1" class="qty-input" /></td>
+              <td><input type="number" placeholder="0" class="price-input" /></td>
+              <td class="sum-cell">0</td>
+              <td><button class="btn-remove" onclick="removeRow(this)">✕</button></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="total-label">Итого запчасти:</td>
+              <td id="parts-total" class="total-value">0</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+        <button class="btn btn-add" onclick="addRow('parts-body', 'parts-total')">+ Добавить запчасть</button>
+      </div>
+
+      <!-- Ремработы -->
+      <h3 class="subsection-title">Ремонтные работы</h3>
+      <div class="table-wrapper">
+        <table class="damage-table" id="works-table">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Наименование работы</th>
+              <th>Часы</th>
+              <th>Ставка (сум/час)</th>
+              <th>Сумма (сум)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="works-body">
+            <tr>
+              <td>1</td>
+              <td><input type="text" placeholder="Замена бампера" /></td>
+              <td><input type="number" value="1" min="0.5" step="0.5" class="qty-input" /></td>
+              <td><input type="number" placeholder="0" class="price-input" /></td>
+              <td class="sum-cell">0</td>
+              <td><button class="btn-remove" onclick="removeRow(this)">✕</button></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="total-label">Итого работы:</td>
+              <td id="works-total" class="total-value">0</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+        <button class="btn btn-add" onclick="addRow('works-body', 'works-total')">+ Добавить работу</button>
+      </div>
+
+      <!-- Материалы -->
+      <h3 class="subsection-title">Материалы</h3>
+      <div class="table-wrapper">
+        <table class="damage-table" id="materials-table">
+          <thead>
+            <tr>
+              <th>№</th>
+              <th>Наименование</th>
+              <th>Кол-во</th>
+              <th>Цена (сум)</th>
+              <th>Сумма (сум)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="materials-body">
+            <tr>
+              <td>1</td>
+              <td><input type="text" placeholder="Грунтовка" /></td>
+              <td><input type="number" value="1" min="1" class="qty-input" /></td>
+              <td><input type="number" placeholder="0" class="price-input" /></td>
+              <td class="sum-cell">0</td>
+              <td><button class="btn-remove" onclick="removeRow(this)">✕</button></td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4" class="total-label">Итого материалы:</td>
+              <td id="materials-total" class="total-value">0</td>
+              <td></td>
+            </tr>
+          </tfoot>
+        </table>
+        <button class="btn btn-add" onclick="addRow('materials-body', 'materials-total')">+ Добавить материал</button>
+      </div>
+
+      <!-- Итоговые суммы -->
+      <div class="grand-total-box">
+        <div class="grand-row">
+          <span>Стоимость запчастей:</span>
+          <strong id="summary-parts">0 сум</strong>
+        </div>
+        <div class="grand-row">
+          <span>Стоимость работ:</span>
+          <strong id="summary-works">0 сум</strong>
+        </div>
+        <div class="grand-row">
+          <span>Стоимость материалов:</span>
+          <strong id="summary-materials">0 сум</strong>
+        </div>
+        <div class="grand-row grand-total">
+          <span>ИТОГО УЩЕРБ:</span>
+          <strong id="summary-total">0 сум</strong>
+        </div>
+        <div class="grand-row">
+          <span>Сумма прописью:</span>
+          <em id="summary-words">—</em>
+        </div>
+      </div>
+    </section>
+
+    <!-- БЛОК 5: Оценщик -->
+    <section class="form-section">
+      <h2 class="section-title">👤 Оценщик</h2>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>ФИО оценщика *</label>
+          <input type="text" id="expert_name" placeholder="Рахимов Алишер Бахтиёрович" />
+        </div>
+        <div class="form-group">
+          <label>Должность</label>
+          <input type="text" id="expert_position" placeholder="Сертифицированный оценщик" />
+        </div>
+        <div class="form-group">
+          <label>Номер сертификата</label>
+          <input type="text" id="expert_cert" placeholder="OC-2024-001" />
+        </div>
+        <div class="form-group">
+          <label>Стаж работы (лет)</label>
+          <input type="number" id="expert_exp" placeholder="5" min="0" />
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="app-footer">
+    <span>ООО «THE BEST VALUATION» © 2026</span>
+    <span id="footer-total">Итого: 0 сум</span>
+  </footer>
+
+</div>
+
+<script src="renderer.js"></script>
+</body>
+</html>
