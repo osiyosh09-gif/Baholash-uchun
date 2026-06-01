@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>ООО «THE BEST VALUATION» - ДТП Оценка</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    
+    /* Print Styles for exactly 8 A4 pages */
+    @media print {
+      body {
+        background: white !important;
+        color: black !important;
+        font-size: 11pt !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .print-page {
+        display: block !important;
+        page-break-after: always;
+        page-break-inside: avoid;
+        width: 210mm;
+        min-height: 297mm;
+        margin: 0 auto !important;
+        padding: 20mm !important;
+        box-sizing: border-box;
+        position: relative;
+        background: white !important;
+        overflow: hidden;
+      }
+      .print-page:last-child {
+        page-break-after: avoid !important;
+      }
+      header, footer, nav, .btn, .no-print-area {
+        display: none !important;
+      }
+      input, textarea, select {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        resize: none !important;
+        pointer-events: none !important;
+        appearance: none;
+      }
+    }
+    @page {
+      size: A4;
+      margin: 0;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
+  <!-- STANDALONE OFFLINE HEADER -->
+  <header class="sticky top-0 bg-white border-b border-slate-200 z-50 no-print">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="bg-blue-600 text-white font-display font-bold px-3 py-1.5 rounded-lg text-lg tracking-wider">TBV</div>
+        <div>
+          <h1 class="text-base font-semibold text-slate-900 leading-tight">ДТП Оценка — Оффлайн Версия</h1>
+          <p class="text-xs text-blue-600 font-medium">ООО «THE BEST VALUATION»</p>
+        </div>
+      </div>
+      <div class="flex items-center space-x-2">
+        <button onclick="setLang('ru')" id="lang-ru-btn" class="px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition">🇷🇺 RU</button>
+        <button onclick="setLang('uz')" id="lang-uz-btn" class="px-3 py-1.5 rounded-md text-xs font-medium cursor-pointer transition">🇺🇿 UZ</button>
+        <button onclick="window.print()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-2 rounded-lg cursor-pointer flex items-center space-x-1.5 transition shadow-sm ml-2">
+          <span>Печать / PDF</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 py-6 no-print space-y-6">
+    <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 flex items-start space-x-3 text-sm text-blue-800">
+      <div class="font-bold">💡</div>
+      <div>
+        <p class="font-semibold">Автономная версия готова!</p>
+        <p class="text-xs text-blue-700 mt-1">Этот файл является на 100% автономным и не требует интернета. Изменения, внесенные на этой странице, сохраняются в вашем браузере (LocalStorage). Для распечатки отчета нажмите кнопку <strong>Печать / PDF</strong> или нажмите <strong>Ctrl + P</strong>.</p>
+      </div>
+    </div>
+
+    <!-- QUICK VISUAL COVER PREVIEW -->
+    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-6">
+      <h2 class="text-lg font-bold text-slate-800 border-b border-slate-100 pb-3 mb-4 flex items-center gap-2">
+        <span class="text-blue-600">📊</span>
+        <span class="lang-node" data-ru="Оперативный расчет суммы ущерба" data-uz="Zarar miqdorining tezkor hisobi"></span>
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-slate-50 p-4 rounded-lg text-center border border-slate-100">
+          <p class="text-xs text-slate-500 font-medium lang-node" data-ru="Общая сумма ущерба (без износа)" data-uz="Umumiy zarar miqdori (eskirishsiz)"></p>
+          <p class="text-2xl font-bold text-slate-900 font-mono mt-2" id="val-total-no-wear">0.00</p>
+        </div>
+        <div class="bg-blue-50 p-4 rounded-lg text-center border border-blue-100">
+          <p class="text-xs text-blue-600 font-bold lang-node" data-ru="Сумма ущерба с износом" data-uz="Zarar miqdori eskirish bilan"></p>
+          <p class="text-3xl font-extrabold text-blue-700 font-mono mt-1" id="val-total-wear">0.00</p>
+          <p class="text-xs text-blue-600 font-medium mt-1">
+            <span class="lang-node" data-ru="Износ по Андрианову:" data-uz="Andrianov bo‘yicha eskirish:"></span>
+            <span class="font-bold" id="val-wear-percent">0.00%</span>
+          </p>
+        </div>
+        <div class="bg-slate-50 p-4 rounded-lg flex flex-col justify-center border border-slate-100 px-6">
+          <div class="text-xs font-semibold text-slate-600"><span class="lang-node" data-ru="Автомобиль:" data-uz="Avtomobil:"></span> <span id="val-car-label" class="font-bold text-slate-800"></span></div>
+          <div class="text-xs font-semibold text-slate-600 mt-1"><span class="lang-node" data-ru="Год выпуска:" data-uz="Yil:"></span> <span id="val-car-year" class="font-bold text-slate-800"></span></div>
+          <div class="text-xs font-semibold text-slate-600 mt-1"><span class="lang-node" data-ru="Пробег КТС:" data-uz="Yurgan masofa:"></span> <span id="val-car-mileage" class="font-bold text-slate-800"></span></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="no-print p-6 text-center text-xs text-slate-400">
+    <span>ДТП Оценка &copy; 2026 | ООО «THE BEST VALUATION»</span>
+  </div>
+
+  <!-- PRINTABLE MULTI-PAGE REPORT CONTAINER -->
+  <div class="print-container bg-white">
+    
+    <!-- PAGE 1: COVER PAGE (TITULNIK) -->
+    <div class="print-page relative flex flex-col justify-between" id="report-page-1">
+      <div class="text-center">
+        <p class="text-xs tracking-widest text-slate-500 font-bold uppercase">Общество с ограниченной ответственностью</p>
+        <p class="text-lg font-bold text-blue-700 leading-tight mt-1">«THE BEST VALUATION»</p>
+        <p class="text-[9px] text-slate-400 italic">Лицензия на оценочную деятельность № 0137 от 12.04.2023 г.</p>
+        <div class="h-px bg-slate-300 my-4"></div>
+      </div>
+      
+      <div class="my-auto text-center space-y-6">
+        <span class="bg-blue-100 text-blue-800 font-semibold px-4 py-1 text-xs tracking-wider rounded-full uppercase lang-node" data-ru="Экспертное заключение об оценке" data-uz="Baholash to‘g‘risidagi ekspert xulosasi"></span>
+        <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight leading-snug">
+          <span class="lang-node" data-ru="ОТЧЕТ ОБ ОЦЕНКЕ УЩЕРБА" data-uz="ZARARNI BAHOLASH HISOBOTI"></span><br>
+          <span class="text-blue-700 font-mono text-3xl">№ <span class="report-id-field"></span></span>
+        </h1>
+        
+        <div class="p-6 bg-slate-50 border border-slate-200 rounded-xl text-left max-w-lg mx-auto space-y-3 shadow-xs">
+          <div>
+            <p class="text-[10px] text-slate-400 uppercase font-semibold tracking-wider lang-node" data-ru="Объект оценки (АМТС)" data-uz="Baholash ob‘ekti (AMTS)"></p>
+            <p class="text-sm font-bold text-slate-800" id="pdf-p1-car"></p>
+          </div>
+          <div>
+            <p class="text-[10px] text-slate-400 uppercase font-semibold tracking-wider lang-node" data-ru="Заказчик оценки" data-uz="Baholash buyurtmachisi"></p>
+            <p class="text-sm font-bold text-slate-800" id="pdf-p1-client"></p>
+          </div>
+          <div>
+            <p class="text-[10px] text-slate-400 uppercase font-semibold tracking-wider lang-node" data-ru="Итоговая величина стоимости ущерба" data-uz="Zarar qiymatining yakuniy miqdori"></p>
+            <p class="text-lg font-extrabold text-blue-700 font-mono" id="pdf-p1-total"></p>
+          </div>
+        </div>
+
+        <div class="flex justify-center mt-6">
+          <img id="pdf-p1-photo" src="" class="max-h-[320px] max-w-[560px] object-contain rounded-lg border border-slate-200 shadow-xs" referrerPolicy="no-referrer" alt="Car photo placeholder">
+        </div>
+      </div>
+
+      <div class="flex justify-between items-end border-t border-slate-100 pt-6">
+        <div class="text-left text-[10px] text-slate-500">
+          <p><span class="font-semibold text-slate-700 lang-node" data-ru="Оценщик:" data-uz="Baholovchi:"></span> <span id="pdf-p1-appraiser"></span></p>
+          <p><span class="font-semibold text-slate-700 lang-node" data-ru="Лицензия:" data-uz="Litsenziya:"></span> <span id="pdf-p1-appraiser-lic"></span></p>
+        </div>
+        <div class="text-right text-[10px] text-slate-500">
+          <p class="font-bold text-slate-800 uppercase">Ташкент &copy; 2026</p>
+          <p class="lang-node" data-ru="Дата отчета:" data-uz="Hisobot sanasi:"> <span id="pdf-p1-date"></span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: TABLE OF CONTENTS (MUNDARIJA) -->
+    <div class="print-page flex flex-col justify-between" id="report-page-2">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-3 mb-6">
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight lang-node" data-ru="СОДЕРЖАНИЕ ХУДЖАТА" data-uz="HISOBOT MUNDARIJASI"></h2>
+          <span class="text-xs text-blue-600 font-mono tracking-wider">ООО «THE BEST VALUATION»</span>
+        </div>
+        
+        <div class="space-y-2.5 text-xs text-slate-700 py-4" id="pdf-toc-list">
+          <!-- Dynamic toc rendering -->
+        </div>
+      </div>
+      <div class="flex justify-between text-[9px] text-slate-400 border-t border-slate-100 pt-4">
+        <span>«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span id="pdf-p2-page-num"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 3: COVER LETTER (SOPROVODITELNOYE PISMO) -->
+    <div class="print-page flex flex-col justify-between" id="report-page-3">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-3 mb-6">
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight lang-node" data-ru="СОПРОВОДИТЕЛЬНОЕ ПИСЬМО" data-uz="KUZATISh XATI"></h2>
+          <span class="text-xs text-blue-600 font-mono tracking-wider">ООО «THE BEST VALUATION»</span>
+        </div>
+        
+        <div class="space-y-4 text-xs text-slate-700 leading-relaxed text-justify">
+          <p class="text-right font-semibold">Уважаемый Заказчик: <span id="pdf-p3-client-head" class="font-bold text-slate-800"></span></p>
+          <p class="lang-node" 
+             data-ru="Настоящим оценочная компания ООО «THE BEST VALUATION» направляет Вам экспетно-оценочное заключение по величине восстановительных затрат и финансового ущерба, причиненного Вашему автотранспортному средству в результате дорожно-транспортного происшествия (ДТП)." 
+             data-uz="Ushbu xat bilan «THE BEST VALUATION» MChJ baholash kompaniyasi yo‘l-transport hodisasi (YTH) natijasida shikastlangan avtotransport vositangizga yetkazilgan tiklash xarajatlari va moliyaviy zarar miqdori bo‘yicha baholash hisobotini taqdim etadi."></p>
+          
+          <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg my-4 space-y-2">
+            <p class="font-semibold text-slate-900 lang-node" data-ru="РЕЗЮМЕ РЕЗУЛЬТАТОВ ОЦЕНКИ:" data-uz="BAHOLASh NATIJALARI XULOSASI:"></p>
+            <p><span class="lang-node" data-ru="Оцениваемое АМТС:" data-uz="Baholanayotgan AMTS:"></span> <strong id="pdf-p3-car"></strong></p>
+            <p><span class="lang-node" data-ru="Идентификационный номер VIN:" data-uz="VIN identifikatsiya raqami:"></span> <strong id="pdf-p3-vin"></strong></p>
+            <p><span class="lang-node" data-ru="Общая стоимость восстановления (без износа):" data-uz="Umumiy tiklash qiymati (eskirishsiz):"></span> <strong id="pdf-p3-grand-nowear"></strong></p>
+            <p><span class="lang-node" data-ru="ИТОГОВАЯ СУММА УЩЕРБА (с учетом износа деталей):" data-uz="YAKUNIY ZARAR MIQDORI (qismlar eskirishini hisobga olgan holda):"></span> <strong class="text-blue-700 text-sm" id="pdf-p3-grand-wear"></strong></p>
+            <p class="text-[11px] italic text-slate-600"><span class="lang-node" data-ru="Сумма прописью:" data-uz="Summa so‘zlar bilan:"></span> <span class="font-bold underline" id="pdf-p3-words"></span></p>
+          </div>
+
+          <p class="lang-node" 
+             data-ru="Расчет калькуляции произведен на основании сертифицированного обследования повреждений КТС с применением утвержденных формул амортизационного износа и рыночных цен на запасные части." 
+             data-uz="Kalkulyatsiya hisob-kitoblar ko‘rik dalolatnomalari va eskirishni hisoblash qoidalari hamda ehtiyot qismlarning joriy bozor narxlari asosida qonunan tasdiqlangan uslublar yordamida amalga oshirildi."></p>
+        </div>
+      </div>
+      <div class="flex justify-between items-end border-t border-slate-100 pt-4">
+        <span class="text-[9px] text-slate-400">«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span class="text-xs text-slate-700 font-semibold lang-node" data-ru="М.П. С уважением, директор ООО и Оценщик" data-uz="M.O‘. Hurmat bilan, direktor va Baholovchi"></span>
+        <span id="pdf-p3-page-num" class="text-[9px] text-slate-400"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 4: AMTS IDENTIFICATION TABLE -->
+    <div class="print-page flex flex-col justify-between" id="report-page-4">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-3 mb-6">
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight lang-node" data-ru="ТЕХНИЧЕСКАЯ ИДЕНТИФИКАЦИЯ АМТС" data-uz="AMTS TEXNIK IDENTIFIKATSIYaSI"></h2>
+          <span class="text-xs text-blue-600 font-mono tracking-wider">ООО «THE BEST VALUATION»</span>
+        </div>
+        
+        <table class="w-full text-xs border-collapse border border-slate-300">
+          <thead>
+            <tr class="bg-slate-100">
+              <th class="border border-slate-300 px-3 py-2 text-left lang-node" data-ru="Технический параметр АМТС" data-uz="AMTS texnik ko‘rsatkichi"></th>
+              <th class="border border-slate-300 px-3 py-2 text-left lang-node" data-ru="Фактическое значение" data-uz="Haqiqiy qiymati"></th>
+            </tr>
+          </thead>
+          <tbody id="pdf-p4-table-body">
+            <!-- Dynamic parameter lines -->
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-between text-[9px] text-slate-400 border-t border-slate-100 pt-4">
+        <span>«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span id="pdf-p4-page-num"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 5: TERMS & ANDRIANOV FORMULA -->
+    <div class="print-page flex flex-col justify-between" id="report-page-5">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-3 mb-6">
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight lang-node" data-ru="МЕТОДОЛОГИЯ РАСЧЕТА ИЗНОСА (АНДРИАНОВ)" data-uz="ESKIRIShNI HISOBLASh USLUBIYATI (ANDRIANOV)"></h2>
+          <span class="text-xs text-blue-600 font-mono tracking-wider">ООО «THE BEST VALUATION»</span>
+        </div>
+        
+        <div class="space-y-4 text-xs text-slate-700 leading-relaxed text-justify">
+          <p class="font-bold text-slate-900 lang-node" data-ru="Теоретическая формула расчета физического износа (ИФ):" data-uz="Eskirishni hisoblashning nazariy formulasi (IF):"></p>
+          
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 text-center my-4">
+            <p class="text-lg font-bold text-blue-800 font-mono">ИФ (%) = (1 - e<sup>-(𝛘 &bull; T + 𝛌 &bull; L)</sup>) &bull; 100</p>
+          </div>
+
+          <p class="font-semibold text-slate-800 lang-node" data-ru="Где:" data-uz="Bu yerda:"></p>
+          <ul class="list-disc pl-5 space-y-1.5 list-inside">
+            <li><strong>T</strong> - <span class="lang-node" data-ru="Фактический возраст АМТС со дня выпуска (лет)." data-uz="Ishlab chiqarilgan kundan boshlab haqiqiy yoshi (yil)."></span></li>
+            <li><strong>L</strong> - <span class="lang-node" data-ru="Фактический пробег АМТС на момент оценки (в тысячах км)." data-uz="Baholash vaqtidagi haqiqiy yurgan masofasi (ming kilometrda)."></span></li>
+            <li><strong>𝛘 (Chi)</strong> - <span class="lang-node" data-ru="Коэффициент влияния фактического возраста на износ." data-uz="Haqiqiy yoshning eskirishga ta‘sir etuvchi koeffitsiyenti."></span></li>
+            <li><strong>𝛌 (Lambda)</strong> - <span class="lang-node" data-ru="Коэффициент влияния пробега КТС." data-uz="Yurgan masofaning eskirishga ta‘sir koeffitsiyenti."></span></li>
+          </ul>
+
+          <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg mt-4 space-y-2">
+            <p class="font-semibold text-slate-900 lang-node" data-ru="ФАКТИЧЕСКИЙ РАСЧЕТ ПО ДАННОМУ ОБЪЕКТУ:" data-uz="USHBU OB‘EKT BO‘YIChA JORIY HISOB-KITOB:"></p>
+            <p><span class="lang-node" data-ru="Расчетный возраст (Т):" data-uz="Hisoblangan yosh (T):"></span> <span id="pdf-p5-t"></span> <span class="lang-node" data-ru="лет" data-uz="yil"></span></p>
+            <p><span class="lang-node" data-ru="Пробег автомобиля (L):" data-uz="Yurgan masofasi (L):"></span> <span id="pdf-p5-l"></span> <span class="lang-node" data-ru="тыс. км" data-uz="ming km"></span></p>
+            <p><span class="lang-node" data-ru="Используемые коэффициенты:" data-uz="Qo‘llanilgan koeffitsiyentlar:"></span> χ = <span id="pdf-p5-chi"></span>, λ = <span id="pdf-p5-lambda"></span></p>
+            <p class="text-blue-700 font-bold"><span class="lang-node" data-ru="ИТОГОВЫЙ ПРОЦЕНТ ИЗНОСА (ИФ%):" data-uz="YAKUNIY ESKIRISh FOIZI (IF%):"></span> <span id="pdf-p5-wear"></span>%</p>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between text-[9px] text-slate-400 border-t border-slate-100 pt-4">
+        <span>«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span id="pdf-p5-page-num"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 6: APPROACHES & FORMULA -->
+    <div class="print-page flex flex-col justify-between" id="report-page-6">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-3 mb-6">
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight lang-node" data-ru="МЕТОДИКА ОЦЕНКИ И КОРРЕКТИРОВКИ" data-uz="BAHOLASh VA TUZATIShLAR METODIKASI"></h2>
+          <span class="text-xs text-blue-600 font-mono tracking-wider">ООО «THE BEST VALUATION»</span>
+        </div>
+        
+        <div class="space-y-4 text-xs text-slate-700 leading-relaxed text-justify">
+          <p class="font-bold text-slate-900 lang-node" data-ru="Принципы компенсационной стоимости ущерба:" data-uz="Zararni kompensatsiya qilish qiymati tamoyillari:"></p>
+          <p class="lang-node"
+             data-ru="При расчете стоимости ущерба применяется Затратный подход, основанный на калькулировании прямых необходимых издержек на восстановление автомобиля до его доаварийного состояния. Расчет вреда производится по формуле:"
+             data-uz="Zarar qiymatini hisoblashda transport vositasini avariyadan oldingi holatga keltirish uchun sarflanadigan to‘g‘ridan-to‘g‘ri zarur xarajatlarni hisoblashga asoslangan Xarajat yondashuvi qo‘llaniladi. Zarar formulasi quyidagicha:"></p>
+
+          <div class="bg-blue-50 border border-blue-200 rounded-lg p-5 text-center my-4">
+            <p class="text-lg font-bold text-blue-800 font-mono">V<sub>ushch</sub> = S<sub>vos</sub> - S<sub>obnovl</sub></p>
+          </div>
+
+          <p class="font-semibold text-slate-800 lang-node" data-ru="Где:" data-uz="Bu yerda:"></p>
+          <ul class="list-disc pl-5 space-y-1.5 list-inside">
+            <li><strong>V<sub>ushch</sub></strong> - <span class="lang-node" data-ru="Величина реального ущерба автомобиля." data-uz="Avtotransport vositasining haqiqiy zarar miqdori."></span></li>
+            <li><strong>S<sub>vos</sub></strong> - <span class="lang-node" data-ru="Общая восстановительная стоимость (запчасти + работы + материалы без износа)." data-uz="Jami tiklash qiymati (ehtiyot qismlar + ishlar + materiallar eskirishsiz)."></span></li>
+            <li><strong>S<sub>obnovl</sub></strong> - <span class="lang-node" data-ru="Амортизационное обновление новой установленной детали по формуле амортизации." data-uz="Amortizatsiya foizi hisobiga yangi o‘rnatilgan qismlarning eskirish yangilanish summasi."></span></li>
+          </ul>
+
+          <p class="lang-node"
+             data-ru="Поскольку замена деталей приводит к технологическому обновлению определенных узлов АМТС, законодательство предусматривает дисконтирование величины компенсации стоимости деталей на процент физического износа. Стоимость работ и лакокрасочных материалов не уменьшается на износ, так как услуги труда и материалы наносятся в полном 100% технологическом цикле."
+             data-uz="Ehtiyot qismlarni almashtirish transport vositasining ma‘lum tugunlarini texnologik yangilanishiga olib kelishi sababli, qonunchilik ehtiyot qismlar qiymatini jismoniy eskirish foiziga kamaytirishni nazarda tutadi. Ish va lak-bo‘yoq materiallari narxi eskirishga kamaytirilmaydi, chunki mehnat xizmatlari va materiallar to‘liq 100% texnologik tsiklda qo‘llaniladi."></p>
+        </div>
+      </div>
+      <div class="flex justify-between text-[9px] text-slate-400 border-t border-slate-100 pt-4">
+        <span>«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span id="pdf-p6-page-num"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 7: EVALUATOR SUMMARY & PROVIDED DOCUMENTS CHECKLIST -->
+    <div class="print-page flex flex-col justify-between" id="report-page-7">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-3 mb-6">
+          <h2 class="text-lg font-bold text-slate-900 tracking-tight lang-node" data-ru="ДАННЫЕ ОЦЕНЩИКА И ПЕРЕЧЕНЬ ДОКУМЕНТОВ" data-uz="BAHOLOVChI MA‘LUMOTLARI VA HUJJATLAR RO‘YXATI"></h2>
+          <span class="text-xs text-blue-600 font-mono tracking-wider">ООО «THE BEST VALUATION»</span>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+          <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg space-y-2">
+            <h3 class="font-bold text-slate-900 border-b pb-1 mb-2 lang-node" data-ru="Реквизиты эксперта-оценщика" data-uz="Mutaxassis-baholovchi rekvizitlari"></h3>
+            <p><span class="font-semibold lang-node" data-ru="ФИО партнера:" data-uz="F.I.Sh.:"></span> <span id="pdf-p7-name"></span></p>
+            <p><span class="font-semibold lang-node" data-ru="Регистрационный №:" data-uz="Registratsiya raqami:"></span> <span id="pdf-p7-lic"></span></p>
+            <p><span class="font-semibold lang-node" data-ru="Диплом / Реестр:" data-uz="Diplom / Reyestr:"></span> <span id="pdf-p7-cert"></span></p>
+            <p><span class="font-semibold lang-node" data-ru="Стаж в оценке:" data-uz="Baholash staji:"></span> <span id="pdf-p7-exp"></span> <span class="lang-node" data-ru="лет" data-uz="yil"></span></p>
+          </div>
+
+          <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg space-y-2">
+            <h3 class="font-bold text-slate-900 border-b pb-1 mb-2 lang-node" data-ru="Оценочная компания" data-uz="Baholash kompaniyasi"></h3>
+            <p><strong id="pdf-p7-comp"></strong></p>
+            <p><span id="pdf-p7-comp-addr"></span></p>
+            <p>Tel: <span id="pdf-p7-comp-tel"></span></p>
+            <p>ИНН: <span id="pdf-p7-comp-inn"></span></p>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <h3 class="font-bold text-xs text-slate-900 mb-2 lang-node" data-ru="Перечень предоставленных Заказчиком документов (8 позиций):" data-uz="Buyurtmachi tomonidan taqdim etilgan hujjatlar ro‘yxati (8 ta pozitsiya):"></h3>
+          <ol class="list-decimal pl-5 text-xs text-slate-600 space-y-1">
+            <li class="lang-node" data-ru="Копия паспорта или реквизиты Заказчика отчета" data-uz="Hisobot buyurtmachisining pasport nusxasi yoki rekvizitlari"></li>
+            <li class="lang-node" data-ru="Технический паспорт автотранспортного средства" data-uz="Avtotransport vositasining texnik pasporti"></li>
+            <li class="lang-node" data-ru="Справка о ДТП, выданная органами ГИБДД / УБДД" data-uz="YTH to‘g‘risida YHXB (GAI) organlari tomonidan berilgan ma‘lumotnoma"></li>
+            <li class="lang-node" data-ru="Водительское удостоверение водителя на момент ДТП" data-uz="YTH yuz bergan vaqtdagi haydovchining haydovchilik guvohnomasi"></li>
+            <li class="lang-node" data-ru="Акт осмотра поврежденного имущества нашими специалистами" data-uz="Mutaxassislarimiz tomonidan shikastlangan mulkni ko‘rikdan o‘tkazish dalolatnomasi"></li>
+            <li class="lang-node" data-ru="Доверенность на право управления (при наличии)" data-uz="Ishonchnoma boshqarish huquqi uchun (agar bor bo‘lsa)"></li>
+            <li class="lang-node" data-ru="Путевой лист КТС (для юридических лиц)" data-uz="GTVning yo‘l varaqasi (yuridik shaxslar uchun)"></li>
+            <li class="lang-node" data-ru="Договор об оказании услуг оценки и задание на оценку" data-uz="Baholash xizmatlarini ko‘rsatish bo‘yicha shartnoma va baholash topshirig‘i"></li>
+          </ol>
+        </div>
+      </div>
+      <div class="flex justify-between items-end border-t border-slate-100 pt-4">
+        <span class="text-[9px] text-slate-400">«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span class="text-xs text-slate-700 font-semibold uppercase lang-node" data-ru="Комплект документов сверен" data-uz="Hujjatlar to‘liq solishtirildi"></span>
+        <span id="pdf-p7-page-num" class="text-[9px] text-slate-400"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 8: CALCULATION SPLIT (ZAPCHASTI/ISHLAR/MATERIAL) -->
+    <div class="print-page flex flex-col justify-between" id="report-page-8">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-2 mb-4">
+          <h2 class="text-base font-bold text-slate-900 tracking-tight lang-node" data-ru="КАЛЬКУЛЯЦИЯ СТОИМОСТИ УЩЕРБА" data-uz="ZARAR QIYMATINING YAKUNIY KALKULYATSIYASI"></h2>
+          <span class="text-xs text-blue-600 font-mono">ООО «THE BEST VALUATION»</span>
+        </div>
+        
+        <div class="space-y-4 text-[10px]">
+          <!-- PARTS TABLE -->
+          <div>
+            <h3 class="font-bold text-slate-800 border-b border-slate-200 pb-1 mb-1 uppercase lang-node" data-ru="1. Спецификация запасных частей" data-uz="1. Butlovchi qismlar (zapchastlar) spetsifikatsiyasi"></h3>
+            <table class="w-full border-collapse border border-slate-300 text-[9px]">
+              <thead>
+                <tr class="bg-slate-50">
+                  <th class="border border-slate-300 p-1 text-center font-bold">№</th>
+                  <th class="border border-slate-300 p-1 text-left lang-node" data-ru="Наименование детали" data-uz="Detal nomi"></th>
+                  <th class="border border-slate-300 p-1 text-center lang-node" data-ru="Каталожный №" data-uz="Katalog raqami"></th>
+                  <th class="border border-slate-300 p-1 text-center lang-node" data-ru="Кол-во" data-uz="Soni"></th>
+                  <th class="border border-slate-300 p-1 text-right lang-node" data-ru="Цена" data-uz="Narxi"></th>
+                  <th class="border border-slate-300 p-1 text-center lang-node" data-ru="Износ" data-uz="Eskirish"></th>
+                  <th class="border border-slate-300 p-1 text-right lang-node" data-ru="Сумма" data-uz="Summa"></th>
+                </tr>
+              </thead>
+              <tbody id="pdf-p8-parts-body">
+                <!-- inject parts -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- LABOR TABLE -->
+          <div>
+            <h3 class="font-bold text-slate-800 border-b border-slate-200 pb-1 mb-1 uppercase lang-node" data-ru="2. Ремонтно-восстановительные работы" data-uz="2. Tiklash va ta’mirlash ishlari"></h3>
+            <table class="w-full border-collapse border border-slate-300 text-[9px]">
+              <thead>
+                <tr class="bg-slate-50">
+                  <th class="border border-slate-300 p-1 text-center font-bold">№</th>
+                  <th class="border border-slate-300 p-1 text-left lang-node" data-ru="Описание ремонта" data-uz="Ish tavsifi"></th>
+                  <th class="border border-slate-300 p-1 text-center lang-node" data-ru="Код" data-uz="Kod"></th>
+                  <th class="border border-slate-300 p-1 text-center lang-node" data-ru="Н/ч" data-uz="N/s"></th>
+                  <th class="border border-slate-300 p-1 text-right lang-node" data-ru="Ставка/час" data-uz="Soni/N/s tarifi"></th>
+                  <th class="border border-slate-300 p-1 text-right lang-node" data-ru="Сумма" data-uz="Summa"></th>
+                </tr>
+              </thead>
+              <tbody id="pdf-p8-labor-body">
+                <!-- inject labor -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- MATERIALS TABLE -->
+          <div>
+            <h3 class="font-bold text-slate-800 border-b border-slate-200 pb-1 mb-1 uppercase lang-node" data-ru="3. Лакокрасочные и расходные материалы" data-uz="3. Bo‘yoq va sarf materiallari"></h3>
+            <table class="w-full border-collapse border border-slate-300 text-[9px]">
+              <thead>
+                <tr class="bg-slate-50">
+                  <th class="border border-slate-300 p-1 text-center font-bold">№</th>
+                  <th class="border border-slate-300 p-1 text-left lang-node" data-ru="Материал" data-uz="Material nomi"></th>
+                  <th class="border border-slate-300 p-1 text-center lang-node" data-ru="Ед." data-uz="O‘lchov birl."></th>
+                  <th class="border border-slate-300 p-1 text-center lang-node" data-ru="Кол-во" data-uz="Soni"></th>
+                  <th class="border border-slate-300 p-1 text-right lang-node" data-ru="Цена" data-uz="Narxi"></th>
+                  <th class="border border-slate-300 p-1 text-right lang-node" data-ru="Сумма" data-uz="Summa"></th>
+                </tr>
+              </thead>
+              <tbody id="pdf-p8-materials-body">
+                <!-- inject materials -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TOTAL CALCULATION BLOCK -->
+          <div class="bg-slate-50 p-2 border border-slate-300 rounded-lg space-y-1 text-right font-mono text-[9px]">
+            <div><span class="lang-node" data-ru="Запчасти (без износа):" data-uz="Zapas qismlar (eskirishsiz):"></span> <strong id="pdf-p8-parts-no-wear"></strong></div>
+            <div><span class="lang-node" data-ru="Запчасти (с учетом износа):" data-uz="Zapas qismlar (eskirish bilan):"></span> <strong id="pdf-p8-parts-wear"></strong></div>
+            <div><span class="lang-node" data-ru="Ta’mirlash ishlari:" data-uz="Ta’mirlash ishlari:"></span> <strong id="pdf-p8-labor-total"></strong></div>
+            <div><span class="lang-node" data-ru="Расходные материалы:" data-uz="Sarf materiallar:"></span> <strong id="pdf-p8-materials-total"></strong></div>
+            <div class="text-xs font-bold text-blue-700 border-t border-slate-300 pt-1 mt-1"><span class="lang-node" data-ru="ИТОГО К ВЫПЛАТЕ:" data-uz="JAMI TO‘LANADIGAN ZARAR:"></span> <span id="pdf-p8-grand-total"></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between items-end border-t border-slate-100 pt-2 text-[10px]">
+        <span class="text-[9px] text-slate-400">«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span class="font-bold lang-node" data-ru="М.П. Судебный эксперт-оценщик: ________________" data-uz="M.O‘. Sud ekspert-baholovchi: ________________"></span>
+        <span id="pdf-p8-page-num" class="text-[9px] text-slate-400"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 9: APPENDIX / SCAN PAGE (ПРИЛОЖЕНИЕ: СЕРТИФИКАТЫ И СКАНЕР) -->
+    <div class="print-page flex flex-col justify-between" id="report-page-9">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-2 mb-4">
+          <h2 class="text-base font-bold text-slate-900 uppercase tracking-tight flex items-center gap-1.5 font-display">
+            <span class="lang-node" data-ru="Приложение: Лицензии и сертификаты" data-uz="Ilova: Litsenziyalar va sertifikatlar"></span>
+          </h2>
+          <span class="text-[10px] text-blue-600 font-mono tracking-widest font-semibold uppercase">«THE BEST VALUATION»</span>
+        </div>
+
+        <div id="pdf-p9-content">
+          <!-- Appendix scan dynamic injection -->
+        </div>
+      </div>
+      <div class="flex justify-between items-end border-t border-slate-100 pt-2 text-[10px]">
+        <span class="text-[9px] text-slate-400">«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span class="font-bold lang-node" data-ru="М.П. Судебный эксперт-оценщик: ________________" data-uz="M.O‘. Sud ekspert-baholovchi: ________________"></span>
+        <span id="pdf-p9-page-num" class="text-[9px] text-slate-400"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 10: PHOTOTABLE - GENERAL VIEW -->
+    <div class="print-page flex flex-col justify-between" id="report-page-10">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-2 mb-4">
+          <h2 class="text-base font-bold text-slate-900 uppercase tracking-tight flex items-center gap-1.5 font-display">
+            <span class="lang-node" data-ru="Приложение: Фототаблица осмотра (Внешний вид)" data-uz="Ilova: Ko‘rik fototabliyasi (Tashqi ko‘rinishi)"></span>
+          </h2>
+          <span class="text-[10px] text-blue-600 font-mono tracking-widest font-semibold uppercase">«THE BEST VALUATION»</span>
+        </div>
+        <div class="text-[10px] text-slate-600 mb-3 font-mono">
+          <span class="lang-node" data-ru="Транспортное средство:" data-uz="Avtotransport vositasi:"></span> <strong id="pdf-p10-car"></strong> | 
+          <strong>VIN:</strong> <span id="pdf-p10-vin"></span>
+        </div>
+        <div id="pdf-p10-photos-grid">
+          <!-- Inject photos 1 to 9 -->
+        </div>
+      </div>
+      <div class="flex justify-between items-end border-t border-slate-100 pt-2 text-[10px]">
+        <span class="text-[9px] text-slate-400">«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span class="font-bold lang-node" data-ru="М.П. Судебный эксперт-оценщик: ________________" data-uz="M.O‘. Sud ekspert-baholovchi: ________________"></span>
+        <span id="pdf-p10-page-num" class="text-[9px] text-slate-400"></span>
+      </div>
+    </div>
+
+    <!-- PAGE 11: PHOTOTABLE - PARTS & DAMAGES -->
+    <div class="print-page flex flex-col justify-between" id="report-page-11">
+      <div>
+        <div class="flex justify-between items-center border-b border-blue-600 pb-2 mb-4">
+          <h2 class="text-base font-bold text-slate-900 uppercase tracking-tight flex items-center gap-1.5 font-display">
+            <span class="lang-node" data-ru="Приложение: Фототаблица осмотра (Детали и Повреждения)" data-uz="Ilova: Ko‘rik fototabliyasi (Detallar va shikastlar)"></span>
+          </h2>
+          <span class="text-[10px] text-blue-600 font-mono tracking-widest font-semibold uppercase">«THE BEST VALUATION»</span>
+        </div>
+        <div class="text-[10px] text-slate-600 mb-3 font-mono">
+          <span class="lang-node" data-ru="Транспортное средство:" data-uz="Avtotransport vositasi:"></span> <strong id="pdf-p11-car"></strong> | 
+          <strong>VIN:</strong> <span id="pdf-p11-vin"></span>
+        </div>
+        <div id="pdf-p11-photos-grid">
+          <!-- Inject photos 10 to 18 -->
+        </div>
+      </div>
+      <div class="flex justify-between items-end border-t border-slate-100 pt-2 text-[10px]">
+        <span class="text-[9px] text-slate-400">«THE BEST VALUATION» | № <span class="report-id-field"></span></span>
+        <span class="font-bold lang-node" data-ru="М.П. Судебный эксперт-оценщик: ________________" data-uz="M.O‘. Sud ekspert-baholovchi: ________________"></span>
+        <span id="pdf-p11-page-num" class="text-[9px] text-slate-400"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STANDALONE JS LOGIC -->
+  <script>
+    // Initial State pre-populated from active report
+    let reportData = {
+  "carEngineVolume": "1.8 L",
+  "carMileage": 105500,
+  "appraiserCompanyPhone": "+998 (91) 401-13-37",
+  "appraiserCompanyAddress": "г. Бухара, ул. Навоийская, д. 41",
+  "carYear": 2021,
+  "carPhotoBase64": "",
+  "materials": [
+    {
+      "unit": "кг",
+      "description": "Краска автомобильная (комплект базовых слоев)",
+      "id": "m1",
+      "quantity": 1.4,
+      "price": 550000
+    },
+    {
+      "unit": "кг",
+      "description": "Шпатлевка полиэфирная высокопрочная",
+      "id": "m2",
+      "price": 70000,
+      "quantity": 1
+    },
+    {
+      "description": "Антифриз (концентрат охлаждения)",
+      "id": "m3",
+      "price": 35000,
+      "quantity": 2,
+      "unit": "л"
+    },
+    {
+      "id": "m4",
+      "description": "Фреон r134a (заправка кондиционера)",
+      "price": 70000,
+      "quantity": 1,
+      "unit": "кг"
+    }
+  ],
+  "reportNumber": "1027/05-26",
+  "carEngineNumber": "B15D212212792DJDX0949",
+  "clientName": "Илёс Қурбонов",
+  "carCondition": "good",
+  "appraiserCompany": "ООО «THE BEST VALUATION»",
+  "carLicensePlate": "80 E 214 EB",
+  "clientAddress": "Бухарская область, Жондорский район, Мирзаён МФЙ",
+  "customWearPercent": 40,
+  "appraiserCompanyINN": "310025904",
+  "carColor": "DIMCHATTY (Темно-серый)",
+  "userId": "Ayhry8gMDJfDce2uxfm6MX7C5w62",
+  "andrianovLambda": 0.0032,
+  "id": "cobalt-dtp-2026",
+  "carMakeModel": "CHEVROLET COBALT",
+  "parts": [
+    {
+      "catalogNumber": "GM-95020456",
+      "applyWear": true,
+      "price": 650000,
+      "quantity": 1,
+      "description": "Передний бампер",
+      "id": "p1"
+    },
+    {
+      "catalogNumber": "GM-95020457",
+      "applyWear": true,
+      "quantity": 1,
+      "price": 300000,
+      "description": "Брикет бампера",
+      "id": "p2"
+    },
+    {
+      "id": "p3",
+      "description": "Клипса бампера пластиковая деталь",
+      "quantity": 2,
+      "price": 30000,
+      "applyWear": true,
+      "catalogNumber": "GM-95020458"
+    },
+    {
+      "id": "p4",
+      "description": "Переднее правое крыло в сборе",
+      "price": 1250000,
+      "quantity": 1,
+      "applyWear": true,
+      "catalogNumber": "GM-95020459"
+    },
+    {
+      "applyWear": true,
+      "catalogNumber": "GM-95020460",
+      "id": "p5",
+      "description": "Передний правый подкрылок",
+      "quantity": 1,
+      "price": 90000
+    },
+    {
+      "applyWear": true,
+      "catalogNumber": "GM-95020461",
+      "description": "Передняя правая блок‑фара",
+      "id": "p6",
+      "quantity": 1,
+      "price": 591000
+    },
+    {
+      "applyWear": true,
+      "catalogNumber": "GM-95020462",
+      "description": "Правая противотуманная фара (галоген)",
+      "id": "p7",
+      "quantity": 1,
+      "price": 350000
+    },
+    {
+      "price": 2500000,
+      "quantity": 1,
+      "description": "Передний капот",
+      "id": "p8",
+      "catalogNumber": "GM-95020463",
+      "applyWear": true
+    },
+    {
+      "price": 40000,
+      "quantity": 2,
+      "id": "p9",
+      "description": "Петли капота",
+      "catalogNumber": "GM-95020464",
+      "applyWear": true
+    },
+    {
+      "applyWear": true,
+      "catalogNumber": "GM-95020465",
+      "id": "p10",
+      "description": "Пенопластовый наполнитель бампера",
+      "quantity": 1,
+      "price": 80000
+    },
+    {
+      "applyWear": true,
+      "catalogNumber": "GM-95020466",
+      "id": "p11",
+      "description": "Бачок воздушного фильтра / ресивер",
+      "quantity": 1,
+      "price": 90000
+    },
+    {
+      "applyWear": true,
+      "catalogNumber": "GM-95020467",
+      "id": "p12",
+      "description": "Передний правый амортизатор",
+      "quantity": 1,
+      "price": 450000
+    }
+  ],
+  "appendixImageBase64": "",
+  "reportDate": "2026-05-29",
+  "orderNumber": "1027/05-26",
+  "appraiserName": "Абдикаримов Бобур Улуғбек ўғли",
+  "clientPhone": "+998 (90) 123-45-67",
+  "carVIN": "XWBJA69VENA004455",
+  "appraiserLicense": "№ 1294 от 22.05.2022 г.",
+  "andrianovChi": 0.065,
+  "appraiserExperience": 4,
+  "carBodyNumber": "ENA004455",
+  "updatedAt": "2026-05-31T12:02:10.494Z",
+  "carTransmission": "auto",
+  "createdAt": "2026-05-31T12:02:10.494Z",
+  "labor": [
+    {
+      "description": "Устранение сложного перекоса элементов переда",
+      "hours": 24.8,
+      "id": "l1",
+      "hourlyRate": 70000,
+      "code": "400"
+    },
+    {
+      "hours": 3.65,
+      "id": "l2",
+      "description": "Разборка и сборка для окраски деталей передка",
+      "code": "399",
+      "hourlyRate": 70000
+    },
+    {
+      "hourlyRate": 70000,
+      "code": "671",
+      "description": "Снятие / Установка переднего крыла",
+      "hours": 4.9,
+      "id": "l3"
+    },
+    {
+      "hours": 1.5,
+      "id": "l4",
+      "description": "Снятие / Установка переднего бампера",
+      "hourlyRate": 70000,
+      "code": "356"
+    },
+    {
+      "code": "214",
+      "hourlyRate": 70000,
+      "description": "Снятие / Установка блок-фары",
+      "hours": 1.8,
+      "id": "l5"
+    },
+    {
+      "hours": 4.8,
+      "id": "l6",
+      "description": "Передний экран кузова ремонт",
+      "code": "338",
+      "hourlyRate": 70000
+    }
+  ],
+  "appraiserCertificate": "АГЕНТСТВО ПО УПРАВЛЕНИЮ ГОСУДАРСТВЕННЫМИ АКТИВАМИ РЕСПУБЛИКИ УЗБЕКИСТАН",
+  "orderDate": "2026-05-29"
+};
+    let currentLang = "ru";
+
+    function formatNumber(num) {
+      return Number(num).toLocaleString('ru-RU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    // Number translation logic
+    const onesRU = ['', 'один', 'два', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
+    const onesFeminineRU = ['', 'одна', 'две', 'три', 'четыре', 'пять', 'шесть', 'семь', 'восемь', 'девять'];
+    const teensRU = ['десять', 'одиннадцать', 'двенадцать', 'тринадцать', 'четырнадцать', 'пятнадцать', 'шестнадцать', 'семнадцать', 'восемнадцать', 'девятнадцать'];
+    const tensRU = ['', '', 'двадцать', 'тридцать', 'сорок', 'пятьдесят', 'шестьдесят', 'семьдесят', 'восемьдесят', 'девяносто'];
+    const hundredsRU = ['', 'сто', 'двести', 'триста', 'четыреста', 'пятьсот', 'шестьсот', 'семьсот', 'восемьсот', 'девятьсот'];
+
+    function numberToWordsRU(num) {
+      if (num === 0) return 'Ноль';
+      let result = '';
+      let integerPart = Math.floor(num);
+      let fractionalPart = Math.round((num - integerPart) * 100);
+
+      // Simple implementation of thousands/millions/billions parsing
+      const parseTriplets = (val, isFem) => {
+        let res = '';
+        const h = Math.floor(val / 100);
+        const remainder = val % 100;
+        const t = Math.floor(remainder / 10);
+        const u = remainder % 10;
+        if (h > 0) res += hundredsRU[h] + ' ';
+        if (t >= 2) {
+          res += tensRU[t] + ' ';
+          if (u > 0) res += (isFem ? onesFeminineRU[u] : onesRU[u]) + ' ';
+        } else if (t === 1) {
+          res += teensRU[u] + ' ';
+        } else if (u > 0) {
+          res += (isFem ? onesFeminineRU[u] : onesRU[u]) + ' ';
+        }
+        return res.trim();
+      };
+
+      const billions = Math.floor(integerPart / 1_000_000_000);
+      const millions = Math.floor((integerPart % 1_000_000_000) / 1_000_000);
+      const thousands = Math.floor((integerPart % 1_000_000) / 1000);
+      const units = integerPart % 1000;
+
+      if (billions > 0) result += parseTriplets(billions, false) + ' миллиард ';
+      if (millions > 0) result += parseTriplets(millions, false) + ' миллион ';
+      if (thousands > 0) result += parseTriplets(thousands, true) + ' тысяч ';
+      if (units > 0 || result === '') result += parseTriplets(units, false) + ' ';
+
+      result = result.trim();
+      result = result.charAt(0).toUpperCase() + result.slice(1);
+      return result + ' сум ' + fractionalPart.toString().padStart(2, '0') + ' тийин';
+    }
+
+    const unitsUZ = ['', 'bir', 'ikki', 'uch', 'to‘rt', 'besh', 'olti', 'yetti', 'sakkiz', 'to‘qqiz'];
+    const tensUZ = ['', 'o‘n', 'yigirma', 'ottiz', 'qirq', 'ellik', 'oltmish', 'yetmish', 'sakson', 'to‘qson'];
+
+    function numberToWordsUZ(num) {
+      if (num === 0) return 'nol';
+      let result = '';
+      let integerPart = Math.floor(num);
+      let fractionalPart = Math.round((num - integerPart) * 100);
+
+      const parseTriplets = (val) => {
+        let res = '';
+        const h = Math.floor(val / 100);
+        const remainder = val % 100;
+        const t = Math.floor(remainder / 10);
+        const u = remainder % 10;
+        if (h > 0) res += (h === 1 ? 'yuz' : unitsUZ[h] + ' yuz') + ' ';
+        if (t > 0) res += tensUZ[t] + ' ';
+        if (u > 0) res += unitsUZ[u] + ' ';
+        return res.trim();
+      };
+
+      const billions = Math.floor(integerPart / 1_000_000_000);
+      const millions = Math.floor((integerPart % 1_000_000_000) / 1_000_000);
+      const thousands = Math.floor((integerPart % 1_000_000) / 1000);
+      const units = integerPart % 1000;
+
+      if (billions > 0) result += parseTriplets(billions) + ' milliard ';
+      if (millions > 0) result += parseTriplets(millions) + ' million ';
+      if (thousands > 0) result += parseTriplets(thousands) + ' ming ';
+      if (units > 0 || result === '') result += parseTriplets(units) + ' ';
+
+      result = result.trim();
+      result = result.charAt(0).toUpperCase() + result.slice(1);
+      return result + ' so‘m ' + fractionalPart.toString().padStart(2, '0') + ' tiyin';
+    }
+
+    function calculateWear() {
+      if (reportData.customWearPercent !== undefined && reportData.customWearPercent !== null) {
+        return reportData.customWearPercent;
+      }
+      const years = Math.max(0, reportData.carYear ? (2026 - Number(reportData.carYear)) : 0);
+      const L = (reportData.carMileage || 0) / 1000;
+      const chi = reportData.andrianovChi || 0.05;
+      const lambda = reportData.andrianovLambda || 0.0025;
+      const exponent = -(chi * years + lambda * L);
+      const wear = (1 - Math.exp(exponent)) * 100;
+      return Math.min(80, Math.max(0, Math.round(wear * 100) / 100));
+    }
+
+    function renderApp() {
+      // Refresh translations
+      document.querySelectorAll('.lang-node').forEach(node => {
+        const val = node.getAttribute('data-' + currentLang);
+        if (val) node.textContent = val;
+      });
+
+      // Update button highlights
+      document.getElementById('lang-ru-btn').className = currentLang === 'ru' 
+        ? 'px-3 py-1.5 rounded-md text-xs font-semibold bg-blue-100 text-blue-700 cursor-pointer pointer-events-none border border-blue-200'
+        : 'px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 hover:text-slate-950 cursor-pointer';
+      
+      document.getElementById('lang-uz-btn').className = currentLang === 'uz' 
+        ? 'px-3 py-1.5 rounded-md text-xs font-semibold bg-blue-100 text-blue-700 cursor-pointer pointer-events-none border border-blue-200'
+        : 'px-3 py-1.5 rounded-md text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 hover:text-slate-950 cursor-pointer';
+
+      // Computations
+      const wearPercent = calculateWear();
+      
+      let partsTotal = 0;
+      let partsWithWearTotal = 0;
+      reportData.parts.forEach(p => {
+        const itemSum = p.quantity * p.price;
+        partsTotal += itemSum;
+        if (p.applyWear) {
+          partsWithWearTotal += itemSum * (1 - wearPercent / 100);
+        } else {
+          partsWithWearTotal += itemSum;
+        }
+      });
+
+      let laborTotal = 0;
+      reportData.labor.forEach(l => {
+        laborTotal += l.hours * l.hourlyRate;
+      });
+
+      let materialsTotal = 0;
+      reportData.materials.forEach(m => {
+        materialsTotal += m.quantity * m.price;
+      });
+
+      const grandTotalNoWear = partsTotal + laborTotal + materialsTotal;
+      const grandTotalWithWear = partsWithWearTotal + laborTotal + materialsTotal;
+
+      const currencyLabel = reportData.currency === 'rub' ? 'RUB' : (reportData.currency === 'usd' ? 'USD' : 'UZS');
+
+      // Update calculations visual panel
+      document.getElementById('val-total-no-wear').textContent = formatNumber(grandTotalNoWear) + ' ' + currencyLabel;
+      document.getElementById('val-total-wear').textContent = formatNumber(grandTotalWithWear) + ' ' + currencyLabel;
+      document.getElementById('val-wear-percent').textContent = wearPercent.toFixed(2) + '%';
+      
+      document.getElementById('val-car-label').textContent = reportData.carMakeModel || '—';
+      document.getElementById('val-car-year').textContent = reportData.carYear || '—';
+      const mileageStringVal = ((reportData.carMileage || 0) / 1000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 }) + (currentLang === 'ru' ? ' тыс. км (' : ' ming km (') + (reportData.carMileage || 0).toLocaleString() + ' км)';
+      document.getElementById('val-car-mileage').textContent = mileageStringVal;
+
+      // Update printable document pages with dynamic values
+      document.querySelectorAll('.report-id-field').forEach(el => {
+        el.textContent = reportData.reportNumber;
+      });
+
+      // Cover Page (Page 1)
+      document.getElementById('pdf-p1-car').textContent = reportData.carMakeModel;
+      document.getElementById('pdf-p1-client').textContent = reportData.clientName;
+      document.getElementById('pdf-p1-total').textContent = formatNumber(grandTotalWithWear) + ' ' + currencyLabel;
+      document.getElementById('pdf-p1-appraiser').textContent = reportData.appraiserName;
+      document.getElementById('pdf-p1-appraiser-lic').textContent = reportData.appraiserLicense;
+      document.getElementById('pdf-p1-date').textContent = new Date(reportData.reportDate).toLocaleDateString(currentLang === 'ru' ? 'ru-RU' : 'uz-UZ');
+      
+      if (reportData.carPhotoBase64) {
+        document.getElementById('pdf-p1-photo').src = reportData.carPhotoBase64;
+        document.getElementById('pdf-p1-photo').style.display = 'block';
+      } else {
+        document.getElementById('pdf-p1-photo').style.display = 'none';
+      }
+
+      // Page 2: Table of Contents Table
+      const tocItems = currentLang === 'ru' ? [
+        "1. Сопроводительное (вводное) письмо руководителю заказчика",
+        "2. Правовые основания и стандарты оценки автотранспортных средств",
+        "3. Персональные данные эксперта-оценщика",
+        "4. Техническая идентификация колесного транспортного средства (КТС)",
+        "5. Металловедческий анализ и характер физических повреждений кузова",
+        "6. Выбор расчетной научно-технической методики исследования",
+        "7. Расчет физического износа комплектующих по формуле Андрианова",
+        "8. Определение стоимости заменяемых деталей (Затратный подход)",
+        "9. Определение стоимости ремонтно-восстановительных работ",
+        "10. Определение стоимости лакокрасочных и расходных материалов",
+        "11. Анализ локального автомобильного рынка и ценообразования",
+        "12. Расчет ущерба с учетом величины амортизационного износа",
+        "13. Сводная калькуляция восстановления транспортного средства",
+        "14. Перечень предоставленных Заказчиком правовых документов",
+        "15. Итоговое заключение судебного эксперта-оценщика и печати"
+      ] : [
+        "1. Buyurtmachi rahbariga yo‘llangan kuzatuv (kirish) xati",
+        "2. Avtotransport vositalarini baholashning huquqiy asoslari va standartlari",
+        "3. Malakali sud eksperti-baholovchisining shaxsiy ma‘lumotlari",
+        "4. G‘ildirakli transport vositasining (GTV) to‘liq texnik identifikatsiyasi",
+        "5. Kuzovning jismoniy shikastlanish xususiyatlarini metallshunoslik tahlili",
+        "6. Shikastlanishlarni tadqiq qilishning ilmiy-texnik hisoblash metodologiyasi",
+        "7. Andrianov formulasi bo‘yicha butlovchi qismlarning jismoniy eskirish hisobi",
+        "8. Almashtiriladigan detal va ulanmalarning qiymati (Xarajat yondashuvi)",
+        "9. Mehnat sarfi normativlari va tiklash-ta’mirlash ishlari qiymati",
+        "10. Kerakli bo‘yoq va sarf materiallariga bo‘lgan ehtiyoj qiymati",
+        "11. Avtomobil ehtiyot qismlari va xizmatlarning mahalliy bozorini tahlil qilish",
+        "12. Amortizatsiya miqdorini hisobga olgan holda zarar qiymati",
+        "13. GTVni avariyadan oldingi holatga keltirish uchun jami kalkulyatsiya",
+        "14. Taqdim etilgan va foydalanilgan huquqni belgilovchi hujjatlar ro‘yxati",
+        "15. Baholovchining sertifikatlangan muhri bilan tasdiqlangan umumiy xulosa"
+      ];
+
+      const tocHtml = tocItems.map((item, idx) => `
+        <div class="flex justify-between border-b border-dashed border-slate-200 pb-1">
+          <span class="font-medium">${item}</span>
+          <span class="font-mono text-slate-400">...........................................................................${idx + 1}</span>
+        </div>
+      `).join('');
+      document.getElementById('pdf-toc-list').innerHTML = tocHtml;
+
+      // Page 3: Cover Letter
+      document.getElementById('pdf-p3-client-head').textContent = reportData.clientName;
+      document.getElementById('pdf-p3-car').textContent = reportData.carMakeModel;
+      document.getElementById('pdf-p3-vin').textContent = reportData.carVIN;
+      document.getElementById('pdf-p3-grand-nowear').textContent = formatNumber(grandTotalNoWear) + ' ' + currencyLabel;
+      document.getElementById('pdf-p3-grand-wear').textContent = formatNumber(grandTotalWithWear) + ' ' + currencyLabel;
+      document.getElementById('pdf-p3-words').textContent = currentLang === 'ru' 
+        ? numberToWordsRU(grandTotalWithWear) 
+        : numberToWordsUZ(grandTotalWithWear);
+
+      // Page 4: Parameter Identification Lines
+      const params = [
+        { labels: { ru: 'Марка и модель КТС', uz: 'КТS markasi va modeli' }, val: reportData.carMakeModel },
+        { labels: { ru: 'Год выпуска', uz: 'Ishlab chiqarilgan yili' }, val: reportData.carYear },
+        { labels: { ru: 'Идентификационный номер (VIN)', uz: 'Identifikatsiya raqami (VIN)' }, val: reportData.carVIN },
+        { labels: { ru: 'Гос. регистрационный знак', uz: 'Davlat raqam belgisi' }, val: reportData.carLicensePlate },
+        { labels: { ru: 'Пробег (фактический)', uz: 'Haqiqiy bosib o‘tgan yo‘li' }, val: ((reportData.carMileage || 0) / 1000).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 3 }) + (currentLang === 'ru' ? ' тыс. км (' : ' ming km (') + (reportData.carMileage || 0).toLocaleString() + ' км)' },
+        { labels: { ru: 'Номер двигателя', uz: 'Dvigatel raqami' }, val: reportData.carEngineNumber || 'Отсутствует' },
+        { labels: { ru: 'Номер кузова/шасси', uz: 'Kuzov/shassi raqami' }, val: reportData.carBodyNumber || 'Не указан' },
+        { labels: { ru: 'Объем двигателя', uz: 'Dvigatel hajmi' }, val: reportData.carEngineVolume },
+        { labels: { ru: 'Цвет кузова КТС', uz: 'КТS rangi' }, val: reportData.carColor },
+        { labels: { ru: 'Тип коробки передач', uz: 'Uzatmalar qutisi turi' }, val: reportData.carTransmission === 'manual' 
+            ? (currentLang === 'ru' ? 'Механическая' : 'Mexanik') 
+            : (currentLang === 'ru' ? 'Автоматическая' : 'Avtomat') },
+        { labels: { ru: 'Техническое состояние КТС', uz: 'КТS texnik holati' }, val: currentLang === 'ru' 
+            ? { excellent: 'Отличное', good: 'Хорошее', satisfactory: 'Удовлетворительное', poor: 'Плохое' }[reportData.carCondition]
+            : { excellent: 'A’lo', good: 'Yaxshi', satisfactory: 'Qoniqarli', poor: 'Noqoniqarli' }[reportData.carCondition] }
+      ];
+
+      const trs = params.map(p => `
+        <tr>
+          <td class="border border-slate-300 px-3 py-1.5 font-semibold text-slate-700 bg-slate-50">${p.labels[currentLang]}</td>
+          <td class="border border-slate-300 px-3 py-1.5 font-medium text-slate-800">${p.val}</td>
+        </tr>
+      `).join('');
+      document.getElementById('pdf-p4-table-body').innerHTML = trs;
+
+      // Page 5: Calculator details
+      const yearsElapsed = Math.max(0, reportData.carYear ? (2026 - Number(reportData.carYear)) : 0);
+      document.getElementById('pdf-p5-t').textContent = yearsElapsed;
+      document.getElementById('pdf-p5-l').textContent = (reportData.carMileage / 1000).toFixed(1);
+      document.getElementById('pdf-p5-chi').textContent = reportData.andrianovChi;
+      document.getElementById('pdf-p5-lambda').textContent = reportData.andrianovLambda;
+      document.getElementById('pdf-p5-wear').textContent = wearPercent.toFixed(2);
+
+      // Page 7: Specialist Details
+      document.getElementById('pdf-p7-name').textContent = reportData.appraiserName;
+      document.getElementById('pdf-p7-lic').textContent = reportData.appraiserLicense;
+      document.getElementById('pdf-p7-cert').textContent = reportData.appraiserCertificate;
+      document.getElementById('pdf-p7-exp').textContent = reportData.appraiserExperience;
+      document.getElementById('pdf-p7-comp').textContent = reportData.appraiserCompany;
+      document.getElementById('pdf-p7-comp-addr').textContent = reportData.appraiserCompanyAddress;
+      document.getElementById('pdf-p7-comp-tel').textContent = reportData.appraiserCompanyPhone;
+      document.getElementById('pdf-p7-comp-inn').textContent = reportData.appraiserCompanyINN;
+
+      // Page 8: Calculations Lists
+      // 8.1 PARTS
+      const partsTrs = reportData.parts.map((p, idx) => {
+        const itemSum = p.quantity * p.price;
+        const finalSum = p.applyWear ? (itemSum * (1 - wearPercent / 100)) : itemSum;
+        const wearText = p.applyWear ? wearPercent.toFixed(1) + '%' : '0.0%';
+        return `
+          <tr>
+            <td class="border border-slate-300 p-1 text-center font-mono">${idx + 1}</td>
+            <td class="border border-slate-300 p-1 font-medium">${p.description}</td>
+            <td class="border border-slate-300 p-1 text-center font-mono text-[8px]">${p.catalogNumber || '—'}</td>
+            <td class="border border-slate-300 p-1 text-center">${p.quantity}</td>
+            <td class="border border-slate-300 p-1 text-right font-mono">${formatNumber(p.price)}</td>
+            <td class="border border-slate-300 p-1 text-center font-mono text-slate-500">${wearText}</td>
+            <td class="border border-slate-300 p-1 text-right font-mono font-semibold">${formatNumber(finalSum)}</td>
+          </tr>
+        `;
+      }).join('');
+      document.getElementById('pdf-p8-parts-body').innerHTML = partsTrs || '<tr><td colspan="7" class="text-center p-2 text-slate-400">Запчасти отсутствуют</td></tr>';
+
+      // 8.2 LABOR
+      const laborTrs = reportData.labor.map((l, idx) => {
+        const itemSum = l.hours * l.hourlyRate;
+        return `
+          <tr>
+            <td class="border border-slate-300 p-1 text-center font-mono">${idx + 1}</td>
+            <td class="border border-slate-300 p-1 font-medium">${l.description}</td>
+            <td class="border border-slate-300 p-1 text-center font-mono text-[8px]">${l.code || '—'}</td>
+            <td class="border border-slate-300 p-1 text-center font-mono">${l.hours}</td>
+            <td class="border border-slate-300 p-1 text-right font-mono">${formatNumber(l.hourlyRate)}</td>
+            <td class="border border-slate-300 p-1 text-right font-mono font-semibold">${formatNumber(itemSum)}</td>
+          </tr>
+        `;
+      }).join('');
+      document.getElementById('pdf-p8-labor-body').innerHTML = laborTrs || '<tr><td colspan="6" class="text-center p-2 text-slate-400">Работы отсутствуют</td></tr>';
+
+      // 8.3 MATERIALS
+      const materialsTrs = reportData.materials.map((m, idx) => {
+        const itemSum = m.quantity * m.price;
+        return `
+          <tr>
+            <td class="border border-slate-300 p-1 text-center font-mono">${idx + 1}</td>
+            <td class="border border-slate-300 p-1 font-medium">${m.description}</td>
+            <td class="border border-slate-300 p-1 text-center">${m.unit}</td>
+            <td class="border border-slate-300 p-1 text-center font-mono">${m.quantity}</td>
+            <td class="border border-slate-300 p-1 text-right font-mono">${formatNumber(m.price)}</td>
+            <td class="border border-slate-300 p-1 text-right font-mono font-semibold">${formatNumber(itemSum)}</td>
+          </tr>
+        `;
+      }).join('');
+      document.getElementById('pdf-p8-materials-body').innerHTML = materialsTrs || '<tr><td colspan="6" class="text-center p-2 text-slate-400">Материалы отсутствуют</td></tr>';
+
+      // Grand totals on page 8
+      document.getElementById('pdf-p8-parts-no-wear').textContent = formatNumber(partsTotal) + ' ' + currencyLabel;
+      document.getElementById('pdf-p8-parts-wear').textContent = formatNumber(partsWithWearTotal) + ' ' + currencyLabel;
+      document.getElementById('pdf-p8-labor-total').textContent = formatNumber(laborTotal) + ' ' + currencyLabel;
+      document.getElementById('pdf-p8-materials-total').textContent = formatNumber(materialsTotal) + ' ' + currencyLabel;
+      document.getElementById('pdf-p8-grand-total').textContent = formatNumber(grandTotalWithWear) + ' ' + currencyLabel;
+
+      // Page 9: Appendix image (or empty fallback notice)
+      if (reportData.appendixImageBase64 && reportData.appendixImageBase64.trim() !== '') {
+        document.getElementById('pdf-p9-content').innerHTML = `
+          <div class="flex justify-center items-center py-1 bg-white rounded-xl border border-slate-200 shadow-sm w-full animate-fade-in" style="height: 248mm;">
+            <img src="${reportData.appendixImageBase64}" referrerpolicy="no-referrer" class="max-h-full max-w-full object-contain rounded-lg" alt="Document Scan">
+          </div>
+        `;
+      } else {
+        document.getElementById('pdf-p9-content').innerHTML = `
+          <div class="p-8 text-center border border-dashed border-slate-300 rounded-xl bg-slate-50/50 mt-10">
+            <p class="text-sm font-medium text-slate-500">
+              ${currentLang === 'ru' 
+                ? 'Скан-копия официального документа отсутствует. Пожалуйста, загрузите документ во вкладке "Умный AI-сканер документов" для отображения на этом листе.' 
+                : 'Rasmiy hujjat nusxasi mavjud emas. Ushbu varaqda chop etilishi uchun iltimos "Smart AI skaner" bo‘limida hujjatni yuklang.'}
+            </p>
+          </div>
+        `;
+      }
+
+      // Photos 1-9 (Page 10)
+      const photos1to9 = (reportData.photos || []).filter(x => x.slotId >= 1 && x.slotId <= 9 && x.base64 && x.base64.trim() !== "");
+      const hasPage10 = photos1to9.length > 0;
+      if (hasPage10) {
+        document.getElementById('report-page-10').style.display = 'flex';
+        document.getElementById('pdf-p10-car').textContent = reportData.carMakeModel;
+        document.getElementById('pdf-p10-vin').textContent = reportData.carVIN || '—';
+        
+        let itemHeight = "66mm";
+        let gridCols = "grid-cols-3";
+        if (photos1to9.length <= 4) {
+          itemHeight = "100mm";
+          gridCols = "grid-cols-2";
+        } else if (photos1to9.length <= 6) {
+          itemHeight = "72mm";
+          gridCols = "grid-cols-2";
+        }
+        
+        document.getElementById('pdf-p10-photos-grid').className = `grid ${gridCols} gap-3`;
+        document.getElementById('pdf-p10-photos-grid').innerHTML = photos1to9.map(p => {
+          return `
+            <div class="border border-slate-300 bg-slate-50/50 rounded-lg p-1.5 flex flex-col justify-between relative overflow-hidden text-center" style="height: ${itemHeight};">
+              <div class="text-[10px] font-bold text-slate-700 font-mono tracking-wider select-none border-b border-slate-100 pb-1 mb-1 bg-slate-100/40 p-1 rounded-sm">
+                #${p.slotId}
+              </div>
+              <div class="flex-grow flex items-center justify-center relative overflow-hidden bg-slate-100 rounded-md">
+                <img src="${p.base64}" referrerpolicy="no-referrer" class="max-h-full max-w-full object-contain" alt="">
+              </div>
+              <div class="text-[6.5px] text-slate-400 truncate pt-1 font-mono">
+                ${p.fileName || '—'}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        document.getElementById('report-page-10').style.display = 'none';
+      }
+
+      // Photos 10-18 (Page 11)
+      const photos10to18 = (reportData.photos || []).filter(x => x.slotId >= 10 && x.slotId <= 18 && x.base64 && x.base64.trim() !== "");
+      const hasPage11 = photos10to18.length > 0;
+      if (hasPage11) {
+        document.getElementById('report-page-11').style.display = 'flex';
+        document.getElementById('pdf-p11-car').textContent = reportData.carMakeModel;
+        document.getElementById('pdf-p11-vin').textContent = reportData.carVIN || '—';
+        
+        let itemHeight = "66mm";
+        let gridCols = "grid-cols-3";
+        if (photos10to18.length <= 4) {
+          itemHeight = "100mm";
+          gridCols = "grid-cols-2";
+        } else if (photos10to18.length <= 6) {
+          itemHeight = "72mm";
+          gridCols = "grid-cols-2";
+        }
+        
+        document.getElementById('pdf-p11-photos-grid').className = `grid ${gridCols} gap-3`;
+        document.getElementById('pdf-p11-photos-grid').innerHTML = photos10to18.map(p => {
+          return `
+            <div class="border border-slate-300 bg-slate-50/50 rounded-lg p-1.5 flex flex-col justify-between relative overflow-hidden text-center" style="height: ${itemHeight};">
+              <div class="text-[10px] font-bold text-slate-700 font-mono tracking-wider select-none border-b border-slate-100 pb-1 mb-1 bg-slate-100/40 p-1 rounded-sm">
+                #${p.slotId}
+              </div>
+              <div class="flex-grow flex items-center justify-center relative overflow-hidden bg-slate-100 rounded-md">
+                <img src="${p.base64}" referrerpolicy="no-referrer" class="max-h-full max-w-full object-contain" alt="">
+              </div>
+              <div class="text-[6.5px] text-slate-400 truncate pt-1 font-mono">
+                ${p.fileName || '—'}
+              </div>
+            </div>
+          `;
+        }).join('');
+      } else {
+        document.getElementById('report-page-11').style.display = 'none';
+      }
+
+      // Dynamic total pages calculation & footers
+      const totalPages = 9 + (hasPage10 ? 1 : 0) + (hasPage11 ? 1 : 0);
+      document.getElementById('pdf-p2-page-num').textContent = currentLang === 'ru' ? `Страница 2 из ${totalPages}` : `Sahifa 2 / ${totalPages}`;
+      document.getElementById('pdf-p3-page-num').textContent = currentLang === 'ru' ? `Страница 3 из ${totalPages}` : `Sahifa 3 / ${totalPages}`;
+      document.getElementById('pdf-p4-page-num').textContent = currentLang === 'ru' ? `Страница 4 из ${totalPages}` : `Sahifa 4 / ${totalPages}`;
+      document.getElementById('pdf-p5-page-num').textContent = currentLang === 'ru' ? `Страница 5 из ${totalPages}` : `Sahifa 5 / ${totalPages}`;
+      document.getElementById('pdf-p6-page-num').textContent = currentLang === 'ru' ? `Страница 6 из ${totalPages}` : `Sahifa 6 / ${totalPages}`;
+      document.getElementById('pdf-p7-page-num').textContent = currentLang === 'ru' ? `Страница 7 из ${totalPages}` : `Sahifa 7 / ${totalPages}`;
+      document.getElementById('pdf-p8-page-num').textContent = currentLang === 'ru' ? `Страница 8 из ${totalPages}` : `Sahifa 8 / ${totalPages}`;
+      document.getElementById('pdf-p9-page-num').textContent = currentLang === 'ru' ? `Страница 9 из ${totalPages}` : `Sahifa 9 / ${totalPages}`;
+      
+      let nextPageNum = 10;
+      if (hasPage10) {
+        document.getElementById('pdf-p10-page-num').textContent = currentLang === 'ru' ? `Страница ${nextPageNum} из ${totalPages}` : `Sahifa ${nextPageNum} / ${totalPages}`;
+        nextPageNum++;
+      }
+      if (hasPage11) {
+        document.getElementById('pdf-p11-page-num').textContent = currentLang === 'ru' ? `Страница ${nextPageNum} из ${totalPages}` : `Sahifa ${nextPageNum} / ${totalPages}`;
+      }
+    }
+
+    function setLang(lang) {
+      currentLang = lang;
+      renderApp();
+    }
+
+    // Initialize
+    window.addEventListener('load', () => {
+      renderApp();
+    });
+  </script>
+</body>
+</html>
